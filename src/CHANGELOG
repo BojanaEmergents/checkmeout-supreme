@@ -1,0 +1,59 @@
+v2.12
+=====
+Added adjustable checkout delay, made some changes to options page
+
+v2.11
+=====
+Set auto-checkout time to 3 seconds
+
+v2.10
+=====
+Fixed timer to 24h
+
+v2.9
+====
+Added auto-start timer, option to stop if size not available. Linked to keywords help page
+
+v2.8
+====
+Fixed bug in selecting any item from the tops/sweaters category
+
+v2.7
+====
+Fully refactored size selection, now compatible with VPNs
+
+v2.6
+====
+Minor changes to options, fixed size selection bug
+
+v2.5
+====
+Refactored navigation, no more glitches!
+
+v2.4
+====
+Added US region support
+
+v2.3
+====
+Updated manifest description
+
+v2.2
+====
+Fixed refresh issue on shop front page
+
+v2.1
+====
+Fixed bug in search algorithm
+
+v2.0
+====
+Implemented keyword search
+
+v1.4
+====
+???????
+
+v1.3
+====
+Full redesign of options page
