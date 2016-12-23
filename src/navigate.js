@@ -140,7 +140,12 @@ if (window.location.href.includes("checkout")) {
 	  function(items) {
 	    document.getElementById('order_billing_name').value = items.name;
 	    document.getElementById("order_email").value = items.email;
-	    document.getElementById("order_tel").value = items.phone;
+	    if (items.region == "us") {
+	    	document.getElementById("order_tl").value = items.phone;
+	    }
+	    else {
+	    	document.getElementById("order_tel").value = items.phone;
+	    }
 	    document.getElementById("bo").value = items.address;
 	    document.getElementById("order_billing_city").value = items.city;
 	    document.getElementById("order_billing_zip").value = items.zip;
@@ -153,7 +158,12 @@ if (window.location.href.includes("checkout")) {
 	    document.getElementById("credit_card_type").value = items.card_type;
 	    document.getElementById("credit_card_month").value = items.expiry_month;
 	    document.getElementById("credit_card_year").value = items.expiry_year;
-	    document.getElementById("vval").value = items.cvv;
+	    if (items.region == "us") {
+	    	document.getElementById("cvw").value = items.cvv;
+	    }
+	    else {
+	    	document.getElementById("vval").value = items.cvv;
+	    }
 
 	    document.getElementsByName("order[terms]")[1].parentElement.className = "icheckbox_minimal checked";
 	    document.getElementsByName("order[terms]")[0].checked = true;

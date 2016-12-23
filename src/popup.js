@@ -28,7 +28,10 @@
                     runnable: true
                 },
                 function() {
-                    chrome.tabs.executeScript(null, {file: "navigate.js"});
+                    setInterval(function() {
+                        console.log("searching...");
+                        chrome.tabs.executeScript(null, {file: "navigate.js"});
+                    }, (750 + (1250 - 750) * Math.random()));
                 });
             }
         });

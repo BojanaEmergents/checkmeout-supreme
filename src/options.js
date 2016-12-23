@@ -133,7 +133,7 @@ document.getElementById('save').addEventListener('click', save_options);
 
 function update_delay() {
 	document.getElementById("delay_text").innerText = document.getElementById("delay").value + " seconds";
-	if (document.getElementById("delay").value <= 2.3) {
+	if (document.getElementById("delay").value <= 2.5) {
 		document.getElementById("delay_text").style.color = "red";
 	}
 	else {
@@ -141,3 +141,7 @@ function update_delay() {
 	}
 }
 document.getElementById("delay").addEventListener("input", update_delay);
+
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip()
+})
