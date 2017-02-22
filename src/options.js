@@ -145,3 +145,7 @@ document.getElementById("delay").addEventListener("input", update_delay);
 $(function () {
 	$('[data-toggle="tooltip"]').tooltip()
 })
+
+$('#add-queue').click(function() {
+	$('#queue-list').append($('<li class="list-group-item">').text('test'));
+});

@@ -9,12 +9,13 @@
 
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+	<link href="css/font-awesome.min.css" rel="stylesheet">
 
 	<style>
 		body {
 			padding: 25px;
 			padding-top: 100px;
-			background-color: #eee;
+			background-color: #f8f8f8;
     	}
     	select {
     		padding: 6px;
@@ -31,6 +32,32 @@
     		padding-right: 25px;
     		float: right;
     	}
+
+		/* some bootstrap theme-ery */
+		a {color: rgb(237, 30, 36);}
+		a:hover {color: rgb(175, 23, 34);}
+
+		.navbar-brand {
+			color: rgb(237, 30, 36) !important;
+		}
+		.navbar-brand:hover {
+			color: rgb(175, 23, 34) !important;
+			text-decoration: underline;
+		}
+
+		.navbar-right {
+			padding-right: 20px;
+		}
+
+    	textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus, select:focus {   
+			border-color: rgba(237, 30, 36, 0.8);
+			box-shadow: 0 1px 1px rgba(237, 30, 36, 0.075) inset, 0 0 8px rgba(237, 30, 36, 0.6);
+			outline: 0 none;
+		}
+
+		.fa {
+			color: rgb(237, 30, 36);
+		}
     </style>
 
 </head>
@@ -46,14 +73,15 @@
 					<span class="icon-bar"></span>
       			</button>
 
-				<a class="navbar-brand" href="https://checkmeout.pro">Check Me Out</a>
+				<a class="navbar-brand" href="https://checkmeout.pro">Check Me Out &nbsp;<span class="badge">2.14</span></a>
 
 				<ul class="nav navbar-nav">
-					<li><a href="#" id="eu">EU</a></li>
-					<li><a href="#" id="us">US</a></li>
-					<li><a href="#" id="jp">JP</a></li>
+					<li><a href="" id="eu">EU</a></li>
+					<li><a href="" id="us">US</a></li>
+					<li><a href="" id="jp">JP</a></li>
 				</ul>
 			</div>
+			<p class="navbar-text navbar-right">Follow us on <a href="https://instagram.com/checkmeoutbots">Instagram</a> to stay up to date with news and giveaways!</p>
 		</div>
 	</nav>
 
@@ -62,7 +90,7 @@
 			<div class="col-md-6">
 				<!-- <div id="status"></div> -->
 				<h3>
-					Shipping information
+					<i class="fa fa-truck" aria-hidden="true"></i> Shipping information
 				</h3>
 				<hr>
 				<form class="form-horizontal" role="form">
@@ -182,7 +210,7 @@
 			</div>
 			<div class="col-md-6">
 				<h3>
-					Payment information
+					<i class="fa fa-credit-card" aria-hidden="true"></i> Payment information
 				</h3>
 				<hr>
 				<form class="form-horizontal" role="form">
@@ -291,7 +319,7 @@
 		<div class="row">
 			<div class="col-md-6" id="keyword-section">
 					<h3>
-						Keyword search (<a href="https://checkmeout.pro/keywords">instructions</a>)
+						<i class="fa fa-search" aria-hidden="true"></i> Keyword search (<a href="https://checkmeout.pro/instructions">instructions</a>)
 					</h3>
 					<hr>
 					<form class="form-horizontal" role="form">
@@ -363,13 +391,32 @@
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="colour">
 								<p>Separated by spaces. As above, must contain no incorrect words.</p>
+								
+								<!--
+								<button id="add-queue" class="btn btn-default">
+									Add to queue &darr;
+								</button>
+								-->
 							</div>
 						</div>
+						<!--
+						<div class="form-group">
+							 
+							<label for="queue-list" class="col-sm-2 control-label">
+								Queue
+							</label>
+							<div class="col-sm-10">
+								<ul class="list-group" id="queue-list">
+									<li class="list-group-item">Empty</li>
+								</ul>
+							</div>
+						</div>
+						-->
 					</form>
 				</div>
 				<div class="col-md-6">
 					<h3>
-						Done?
+						<i class="fa fa-check" aria-hidden="true"></i> Done?
 					</h3>
 					<hr>
 					<div class="form-group">
@@ -403,5 +450,16 @@
     <script src="options.js"></script>
     <script src="tc.js"></script>
     <script src="country.js"></script>
+
+    <script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-87467388-2', 'auto');
+		ga('send', 'pageview');
+	</script>
+
   </body>
 </html>

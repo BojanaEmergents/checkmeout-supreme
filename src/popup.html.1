@@ -1,0 +1,64 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+	<head>
+		<title>Check Me Out for Supreme</title>
+		<style>
+			body {
+				// font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+				font-family: "Courier New", monospace;
+				font-size: 100%;
+			}
+			#main {
+				/* avoid an excessively wide status text */
+				white-space: pre-line;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				width: 300px;
+			}
+			button {
+				color: white;
+				background-color: red;
+				border: solid 1px red;
+				height: 4em; width: 75%;
+				border-radius: 4px;
+			}
+			#opts, #inst {
+				height: 2.5em;
+			}
+			.header {
+				margin-left: auto;
+				margin-right: auto;
+				display: block;
+				max-width: 150px;
+				padding-right: 20px;
+				padding-left: 20px;
+			}
+			#time {
+				text-align: center;
+			}
+		</style>
+
+		<!--
+			- JavaScript and HTML must be in separate files: see our Content Security
+			- Policy documentation[1] for details and explanation.
+			-
+			- [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+		 -->
+		 <script type="text/javascript" src="popup.js"></script>
+	</head>
+	<body>
+		<div id="main">
+			<button type="button" class="header" id="run">CHECKOUT NOW</button>
+			<p style="font-size: 0.75em; text-align: center;"">Warning: the Supreme store may change at any time, causing the bot to fail. We work as fast as we can to adapt, but obviously cannot predict the future!</p>
+			<button type="button" class="header" id="opts">Settings</button>
+			<button type="button" class="header" id="inst">Instructions</button>
+			<p id="time"></p>
+			<img src="logo-cmo.png" class="header">
+		</div>
+	</body>
+</html>

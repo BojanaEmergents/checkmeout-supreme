@@ -1,64 +1,60 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <!--
- This page is shown when the extension button is clicked, because the
- "browser_action" field in manifest.json contains the "default_popup" key with
- value "popup.html".
- -->
+	Spatial by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
 <html>
-  <head>
-    <title>Check Me Out for Supreme</title>
-    <style>
-      body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-      }
-      #main {
-        /* avoid an excessively wide status text */
-        white-space: pre-line;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        // min-width: 250px;
-        max-width: 400px;
-      }
-      button {
-        color: white;
-        background-color: red;
-        border: solid 1px red;
-        height: 4em; width: 75%;
-        border-radius: 4px;
-      }
-      #opts {
-        height: 2.5em;
-      }
-      .header {
-        margin-left: auto;
-        margin-right: auto;
-        display: block;
-        max-width: 200px;
-        padding-right: 20px;
-        padding-left: 20px;
-      }
-      #time {
-        text-align: center;
-      }
-    </style>
+	<head>
+		<title>Check Me Out Supreme bot</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="css/popup/main.css" />
+		<link rel="stylesheet" href="css/popup/round-button.css" />
+		<style>
+			#opts, #inst {
+				padding-left: 15px;
+				padding-right: 15px;
+			}
+			#desc {
+				font-size: 0.65em !important;
+				line-height: 1.75em;
+			}
+			#time {
+				color: white !important;
+			}
+		</style>
+	</head>
+	<body class="landing">
+		<!-- Banner -->
+			<section id="banner">
+				<ul class="actions">
+					<li><button type="button" class="button special big" id="run">CHECKOUT NOW</button></li>
+				</ul>
 
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-     -->
-     <script type="text/javascript" src="popup.js"></script>
-  </head>
-  <body>
-    <div id="main">
-      <button type="button" class="header" id="run">CHECKOUT NOW</button>
-      <p style="font-size: 0.75em; text-align: center;"">A few seconds before the drop, click checkout now repeatedly!</p>
-      <button type="button" class="header" id="opts">Settings</button>
-      <p id="time"></p>
-      <img src="logo-cmo.png" class="header">
-    </div>
-  </body>
+				<h3 id="time"></h3>
+
+				<button type="button" class="button special small" id="opts">Settings</button>
+				<button type="button" class="button special small" id="inst">Instructions</button>
+			</section>
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="container">
+					<ul class="icons">
+						<li><a href="https://facebook.com/checkmeoutbot" class="icon fa-facebook" target="_blank"></a></li>
+						<li><a href="https://twitter.com/checkmeoutbot" class="icon fa-twitter" target="_blank"></a></li>
+						<li><a href="https://instagram.com/checkmeoutbots" class="icon fa-instagram" target="_blank"></a></li>
+					</ul>
+					<p id="desc">Warning: the Supreme store may change at any time, causing the bot to fail. We work as fast as we can to adapt, but obviously cannot predict the future!</p>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="js/popup/jquery.min.js"></script>
+			<script src="popup.js"></script>
+			<script src="js/popup/util.js"></script>
+			<script src="js/popup/main.js"></script>
+			<script src="js/popup/analytics.js"></script>
+
+	</body>
 </html>
-
