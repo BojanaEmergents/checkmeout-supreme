@@ -1,10 +1,18 @@
+v2.20
+=====
+Added option to stop the bot repeatedly trying to checkout
+Added keywords reminder
+More options page theming
+Re-adjust for US store
+
 v2.19
 =====
 Fixed one-size issue
 
 v2.18
 =====
-Fixed analytics in options page, updated version icon
+Fixed analytics in options page
+Updated version icon
 
 v2.17
 =====
@@ -12,7 +20,8 @@ Fixed missing icons and analytics inline issue
 
 v2.16
 =====
-Redesigned pop-up, added analytics tracking
+Redesigned pop-up
+Added analytics tracking
 
 v2.15
 =====
@@ -20,7 +29,8 @@ Edited pop-up with new warning message
 
 v2.14
 =====
-Completed timer fucntionality, themed options page
+Completed timer fucntionality
+Themed options page
 
 v2.13
 =====
@@ -28,7 +38,8 @@ Fixed changes in US store
 
 v2.12
 =====
-Added adjustable checkout delay, made some changes to options page
+Added adjustable checkout delay
+Made some changes to options page
 
 v2.11
 =====
@@ -40,7 +51,8 @@ Fixed timer to 24h
 
 v2.9
 ====
-Added auto-start timer, option to stop if size not available. Linked to keywords help page
+Added auto-start timer, option to stop if size not available
+Linked to keywords help page
 
 v2.8
 ====
@@ -52,7 +64,8 @@ Fully refactored size selection, now compatible with VPNs
 
 v2.6
 ====
-Minor changes to options, fixed size selection bug
+Minor changes to options
+Fixed size selection bug
 
 v2.5
 ====

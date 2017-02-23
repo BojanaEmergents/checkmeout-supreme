@@ -119,6 +119,7 @@ if (window.location.href.includes("shop/") && /^([a-zA-Z0-9]{9})$/.test(url_spli
 if (window.location.href.includes("checkout")) {
   	chrome.storage.sync.get({
   		region: '',
+  		runnable: '',
 
     	name: '',
     	email: '',
@@ -135,17 +136,14 @@ if (window.location.href.includes("checkout")) {
     	expiry_year: '',
     	cvv: '',
     	autoco: '',
+    	tryagain: '',
     	delay: ''
 	  }, 
 	  function(items) {
 	    document.getElementById('order_billing_name').value = items.name;
 	    document.getElementById("order_email").value = items.email;
-	    if (items.region == "us") {
-	    	document.getElementById("order_tl").value = items.phone;
-	    }
-	    else {
-	    	document.getElementById("order_tel").value = items.phone;
-	    }
+	    document.getElementById("order_tel").value = items.phone;
+
 	    document.getElementById("bo").value = items.address;
 	    document.getElementById("order_billing_city").value = items.city;
 	    document.getElementById("order_billing_zip").value = items.zip;
@@ -158,25 +156,22 @@ if (window.location.href.includes("checkout")) {
 	    document.getElementById("credit_card_type").value = items.card_type;
 	    document.getElementById("credit_card_month").value = items.expiry_month;
 	    document.getElementById("credit_card_year").value = items.expiry_year;
-	    if (items.region == "us") {
-	    	document.getElementById("cvw").value = items.cvv;
-	    }
-	    else {
-	    	document.getElementById("vval").value = items.cvv;
-	    }
+	    document.getElementById("vval").value = items.cvv;
 
 	    document.getElementsByName("order[terms]")[1].parentElement.className = "icheckbox_minimal checked";
 	    document.getElementsByName("order[terms]")[0].checked = true;
 		document.getElementsByName("order[terms]")[1].checked = true;
 
-		if (items.autoco) {
+		if (items.autoco && items.runnable) {
 			setTimeout(function(){document.getElementsByName("commit")[0].click();}, items.delay*1000);
-		}
 
-		chrome.storage.sync.set({
-			runnable: false
-		},
-		function() {});
+			if (!items.tryagain) {
+				chrome.storage.sync.set({
+					runnable: false
+				},
+				function() {});
+			}
+		}
 	});
 }
 console.log((performance.now() - t0).toFixed(2) + " ms");

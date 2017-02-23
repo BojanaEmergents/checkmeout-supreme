@@ -17,6 +17,7 @@ function save_options() {
   var size = document.getElementById("size").value;
   var any_size = document.getElementById("any_size").checked;
   var autoco = document.getElementById("autoco").checked;
+  var tryagain = document.getElementById("tryagain").checked;
   var delay = document.getElementById("delay").value;
   
   var kw_enabled = document.getElementById("kw_enabled").checked;
@@ -45,6 +46,7 @@ function save_options() {
 	size: size,
 	any_size: any_size,
 	autoco: autoco,
+	tryagain: tryagain,
 	delay: delay,
 
 	kw_enabled: kw_enabled,
@@ -87,6 +89,7 @@ function restore_options() {
 	size: '',
 	any_size: '',
 	autoco: '',
+	tryagain: '',
 	delay: '',
 
 	kw_enabled: '',
@@ -115,6 +118,7 @@ function restore_options() {
 	document.getElementById("size").value = items.size;
 	document.getElementById("any_size").checked = items.any_size;
 	document.getElementById("autoco").checked = items.autoco;
+	document.getElementById("tryagain").checked = items.tryagain;
 	document.getElementById("delay").value = items.delay;
 	document.getElementById("delay_text").innerText = items.delay + " seconds";
 
@@ -141,6 +145,15 @@ function update_delay() {
 	}
 }
 document.getElementById("delay").addEventListener("input", update_delay);
+
+$('#keywords').on('input propertychange paste', function() {
+	if (!$('#kw_enabled').is(':checked')) {
+		$('#keywords').tooltip('show');
+	}
+	else {
+		$('#keywords').tooltip('hide');
+	}
+});
 
 $(function () {
 	$('[data-toggle="tooltip"]').tooltip()
