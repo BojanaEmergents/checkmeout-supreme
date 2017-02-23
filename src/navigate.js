@@ -98,7 +98,7 @@ if (window.location.href.includes("shop/") && /^([a-zA-Z0-9]{9})$/.test(url_spli
     		return option.text;
 		});
 
-		if (values.indexOf(items.size) == -1 && items.any_size == false) {
+		if (values.indexOf(items.size) == -1 && items.any_size == false && items.size != 'One size') {
 			alert("Size " + items.size + " not available. The bot will now halt.");
 		}
 		else {
