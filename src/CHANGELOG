@@ -1,3 +1,8 @@
+v2.21
+=====
+Added option to clear sections in options page
+Started work on queue
+
 v2.20
 =====
 Added option to stop the bot repeatedly trying to checkout

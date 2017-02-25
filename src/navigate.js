@@ -60,10 +60,10 @@ if (url_split[url_split.length-1] == "shop" || url_split[url_split.length-3] == 
 		kw_enabled: '',
 	}, 
 	function(items) {
-	    if (items.kw_enabled && items.runnable && items.region != "jp") {
-	    	// window.location.href = "https://supremenewyork.com/shop/all/" + items.category;
-	    	findKeywordItem();
-	    }
+		if (items.kw_enabled && items.runnable && items.region != "jp") {
+			// window.location.href = "https://supremenewyork.com/shop/all/" + items.category;
+			findKeywordItem();
+		}
 	});
 }
 
@@ -95,7 +95,7 @@ if (window.location.href.includes("shop/") && /^([a-zA-Z0-9]{9})$/.test(url_spli
 	}, 
 	function(items) {
 		var values = $.map($('#size option') ,function(option) {
-    		return option.text;
+			return option.text;
 		});
 
 		if (values.indexOf(items.size) == -1 && items.any_size == false && items.size != 'One size') {
@@ -117,49 +117,49 @@ if (window.location.href.includes("shop/") && /^([a-zA-Z0-9]{9})$/.test(url_spli
 
 // if on checkout page, autofill data
 if (window.location.href.includes("checkout")) {
-  	chrome.storage.sync.get({
-  		region: '',
-  		runnable: '',
+	chrome.storage.sync.get({
+		region: '',
+		runnable: '',
 
-    	name: '',
-    	email: '',
-    	phone: '',
-    	address: '',
-    	city: '',
-    	zip: '',
-    	state: '',
-    	country: '',
+		name: '',
+		email: '',
+		phone: '',
+		address: '',
+		city: '',
+		zip: '',
+		state: '',
+		country: '',
 
-    	card_type: '',
-    	card_no: '',
-    	expiry_month: '',
-    	expiry_year: '',
-    	cvv: '',
-    	autoco: '',
-    	tryagain: '',
-    	delay: ''
+		card_type: '',
+		card_no: '',
+		expiry_month: '',
+		expiry_year: '',
+		cvv: '',
+		autoco: '',
+		tryagain: '',
+		delay: ''
 	  }, 
 	  function(items) {
-	    document.getElementById('order_billing_name').value = items.name;
-	    document.getElementById("order_email").value = items.email;
-	    document.getElementById("order_tel").value = items.phone;
+		document.getElementById('order_billing_name').value = items.name;
+		document.getElementById("order_email").value = items.email;
+		document.getElementById("order_tel").value = items.phone;
 
-	    document.getElementById("bo").value = items.address;
-	    document.getElementById("order_billing_city").value = items.city;
-	    document.getElementById("order_billing_zip").value = items.zip;
-	    document.getElementById("order_billing_country").value = items.country;
+		document.getElementById("bo").value = items.address;
+		document.getElementById("order_billing_city").value = items.city;
+		document.getElementById("order_billing_zip").value = items.zip;
+		document.getElementById("order_billing_country").value = items.country;
 		if (items.region == "us") {
-	    	document.getElementById("order_billing_state").value = items.state;
+			document.getElementById("order_billing_state").value = items.state;
 		}
 
-	    document.getElementById("cnb").value = items.card_no;
-	    document.getElementById("credit_card_type").value = items.card_type;
-	    document.getElementById("credit_card_month").value = items.expiry_month;
-	    document.getElementById("credit_card_year").value = items.expiry_year;
-	    document.getElementById("vval").value = items.cvv;
+		document.getElementById("cnb").value = items.card_no;
+		document.getElementById("credit_card_type").value = items.card_type;
+		document.getElementById("credit_card_month").value = items.expiry_month;
+		document.getElementById("credit_card_year").value = items.expiry_year;
+		document.getElementById("vval").value = items.cvv;
 
-	    document.getElementsByName("order[terms]")[1].parentElement.className = "icheckbox_minimal checked";
-	    document.getElementsByName("order[terms]")[0].checked = true;
+		document.getElementsByName("order[terms]")[1].parentElement.className = "icheckbox_minimal checked";
+		document.getElementsByName("order[terms]")[0].checked = true;
 		document.getElementsByName("order[terms]")[1].checked = true;
 
 		if (items.autoco && items.runnable) {
