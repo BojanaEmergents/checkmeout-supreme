@@ -10,12 +10,23 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
 	<link href="css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 	<style>
+		@font-face {
+    		font-family: Futura;
+    		src: url(/fonts/futura-heavy-oblique.otf);
+		}
+		@font-face {
+    		font-family: MerchantCopy;
+    		src: url(/fonts/merchant-copy.ttf);
+		}
+
 		body {
 			padding: 25px;
 			padding-top: 100px;
 			background-color: #f8f8f8;
+			font-family: "Roboto" !important;
     	}
     	select {
     		padding: 6px;
@@ -37,12 +48,8 @@
 		a {color: rgb(237, 30, 36);}
 		a:hover {color: rgb(175, 23, 34);}
 
-		.navbar-brand {
-			color: rgb(237, 30, 36) !important;
-		}
-		.navbar-brand:hover {
-			color: rgb(175, 23, 34) !important;
-			text-decoration: underline;
+		.navbar-brand, .shopping-header {
+			font-family: Futura !important;
 		}
 
 		.navbar-right {
@@ -55,12 +62,99 @@
 			outline: 0 none;
 		}
 
+		select:active, select:hover {
+			outline-color: red;
+		}
+
+		input[type='checkbox'] {
+			-webkit-appearance: none;
+			background-color: #fff;
+			border: 1px solid #000;
+			padding:5px;
+			border-radius: 2px;
+			display: inline-block;
+			position: relative;
+		}
+		input[type='checkbox']:checked {
+			background-color: rgb(237, 30, 36);
+			border: 1px solid #000;
+		}
+
 		.fa {
 			color: rgb(237, 30, 36);
 		}
 
 		.btn-clear {
 			float: right;
+		}
+
+		#add-queue {
+			margin-bottom: 5px;
+		}
+
+		#keyword-alert {
+			display: none;
+		}
+
+		.list-group-item:first-child {
+			background-color: #fff;
+			border-top: 1px solid gray;
+			border-left: 1px solid gray;
+			border-right: 1px solid gray;
+		}
+		.list-group-item  {
+			background-color: #fff;
+			font-family: MerchantCopy;
+			color: #777;
+			font-size: 1.5em;
+
+			border-top: 1px dashed gray;
+			border-bottom: 1px dashed gray;
+			border-left: 1px solid gray;
+			border-right: 1px solid gray;
+		}
+		.list-group-item:last-child {
+			background-color: #fff;
+			border-bottom: 1px solid gray;
+			border-left: 1px solid gray;
+			border-right: 1px solid gray;
+		}
+
+		.shopping-item:hover {
+			//background-color: #ffc5c4;
+			border-right: 8px solid red;
+		}
+		.shopping-item:hover > .delete-hint {
+			display: block;
+		}
+
+		.shopping-list-item {
+			font-family: MerchantCopy;
+			color: #777;
+			display: inline-block;
+		}
+		#shopping-date {
+			float: right;
+		}
+
+		.delete-hint {
+			display: none;
+			float: right;
+		}
+
+		.logo-lred {
+			color: #ed1d24;
+		}
+		.logo-dred {
+			color: #ce212a;
+		}
+		.logo-orange {
+			color: #f37e22;
+		}
+
+		#status {
+			margin-top: 10px;
+			display: none;
 		}
 
 		::selection {
@@ -86,12 +180,12 @@
 					<span class="icon-bar"></span>
       			</button>
 
-				<a class="navbar-brand" href="https://checkmeout.pro">Check Me Out &nbsp;<span class="badge">2.21</span></a>
+				<a class="navbar-brand" href="https://checkmeout.pro"><span class="logo-lred">Check</span><span class="logo-dred">Me</span><span class="logo-orange">Out</span> for Supreme &nbsp;<span class="badge">3.0&nbsp;</span></a>
 
 				<ul class="nav navbar-nav">
 					<li><a href="" id="eu">EU</a></li>
 					<li><a href="" id="us">US</a></li>
-					<li><a href="" id="jp">JP</a></li>
+					<!-- <li><a href="" id="jp">JP</a></li> -->
 				</ul>
 			</div>
 			<p class="navbar-text navbar-right">Follow us on <a href="https://instagram.com/checkmeoutbots">Instagram</a> to stay up to date with news and giveaways!</p>
@@ -103,7 +197,7 @@
 			<div class="col-md-6">
 				<!-- <div id="status"></div> -->
 				<h3>
-					<i class="fa fa-truck" aria-hidden="true"></i> Shipping information
+					<i class="fa fa-truck" aria-hidden="true"></i>&nbsp; Shipping information
 					<button class="btn btn-default btn-clear" id="clear-shipping"><i class="fa fa-close" aria-hidden="true"></i></button>
 				</h3>
 				<hr>
@@ -224,7 +318,7 @@
 			</div>
 			<div class="col-md-6">
 				<h3>
-					<i class="fa fa-credit-card" aria-hidden="true"></i> Payment information
+					<i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp; Payment information
 					<button class="btn btn-default btn-clear" id="clear-payment"><i class="fa fa-close" aria-hidden="true"></i></button>
 				</h3>
 				<hr>
@@ -328,10 +422,13 @@
 		<div class="row">
 			<div class="col-md-6" id="keyword-section">
 					<h3>
-						<i class="fa fa-search" aria-hidden="true"></i> Keyword search (<a href="https://checkmeout.pro/instructions">instructions</a>)
+						<i class="fa fa-search" aria-hidden="true"></i>&nbsp; Keyword search (<a href="https://checkmeout.pro/instructions">instructions</a>)
 						<button class="btn btn-default btn-clear" id="clear-keywords"><i class="fa fa-close" aria-hidden="true"></i></button>
 					</h3>
 					<hr>
+
+					<div class="alert alert-danger alert-dismissable" role="alert" id="keyword-alert">These boxes cannot be left blank!<button type="button" class="close" id="keyword-alert-dismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 
@@ -359,7 +456,7 @@
 			     					</span>
 			      					<input type="text" class="form-control" id="start_time" aria-label="...">
 		    					</div>
-		    					<p>24H time in format HH:MM:SS (your machine time, not the time on supremenewyork.com)</p>
+		    					<p>24H time in format HH:MM:SS (your machine time, not the time on supremenewyork.com). We recommend <a href="https://time.is/">time.is</a> for setting your time accurately.</p>
 							</div>
 						</div>
 						<div class="form-group">
@@ -419,30 +516,42 @@
 		 						</select>
 							</div>
 						</div>
-						<!--
+
 						<div class="form-group">
 							 
-							<label for="queue-list" class="col-sm-2 control-label">
-								Queue
-							</label>
-							<div class="col-sm-10">
+							<div class="col-sm-offset-2 col-sm-10">
 								<button type="button" id="add-queue" class="btn btn-default">
-									Add to queue &darr;
+									Add to shopping list &nbsp;<i class="fa fa-arrow-right"></i>
 								</button>
-								<ul class="list-group" id="queue-list">
-								</ul>
 							</div>
 						</div>
-						-->
+
 					</form>
 				</div>
 				<div class="col-md-6">
 					<h3>
-						<i class="fa fa-check" aria-hidden="true"></i> Done?
+						<i class="fa fa-check" aria-hidden="true"></i>&nbsp; Finalise
 					</h3>
 					<hr>
 					<div class="form-group">
+							 
+						<label for="queue-list" class="col-sm-2 control-label" style="text-align: right">
+							Shopping list
+						</label>
+						<div class="col-sm-10">
+							<div class="list-group shopping-list" id="queue-list">
+								<li class="list-group-item shopping-header">
+									<p class="shopping-list-item">Check Me Out x Supreme</p>
+									<p id="shopping-date" class="shopping-list-item">date</p>
+								</li>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
 
+						<label for="tc_accepted" class="col-sm-2 control-label" style="text-align: right">
+							Confirm
+						</label>
 						<div class="col-sm-10">
 							<div class="checkbox">
 									 
@@ -453,13 +562,12 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<div class="col-sm-10">
+						<div class="col-sm-offset-2 col-sm-10">
 								 
 							<button id="save" class="btn btn-default">
 								Save
 							</button>
-							<br>
-							<div id="status"></div>
+							<div class="alert alert-success" role="alert" id="status">Options saved successfully.</div>
 						</div>
 					</div>
 				</div>

@@ -60,10 +60,9 @@ function save_options() {
 	}, 
 	function() {
 		// Update status to let user know options were saved.
-		var status = document.getElementById('status');
-		status.textContent = 'Options saved.';
+		$("#status")[0].style.display = 'block';
 		setTimeout(function() {
-			status.textContent = '';
+			$("#status")[0].style.display = 'none';
 		}, 2000);
 	});
 }
@@ -71,7 +70,6 @@ function save_options() {
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
 function restore_options() {
-	// Use default value color = 'red' and likesColor = true.
 	chrome.storage.sync.get({
 		name: '',
 		email: '',
@@ -131,8 +129,9 @@ function restore_options() {
 		document.getElementById("colour").value = items.colour;
 		document.getElementById("size").value = items.size;
 
+		queue_list = items.queue;
 		for (item in items.queue) {
-			$('#queue-list').append($('<li class="list-group-item">').text(items.queue[item][0]+" / "+items.queue[item][1]+" / "+items.queue[item][2]));
+			$('#queue-list').append($('<li class="list-group-item shopping-item">').html(items.queue[item][0]+": "+items.queue[item][1]+" - "+items.queue[item][2]+" ("+items.queue[item][3]+") <p class=\"delete-hint\">delete</p>"));
 		}
 	});
 }
@@ -194,21 +193,49 @@ $("#clear-keywords").click(function() {
 	document.getElementById("keywords").value = "";
 	document.getElementById("colour").value = "";
 	document.getElementById("size").value = "";
-	document.getElementById("queue-list").innerHTML = "";
-	queue_list = [];
 });
 
-var queue_list = [];
-
 $('#add-queue').click(function() {
+	var queue_category = $('#category')[0].value;
+	var category_index = $('#category')[0].selectedIndex;
 	var queue_name = $('#keywords')[0].value;
 	var queue_colour = $('#colour')[0].value;
 	var queue_size = $('#size')[0].value;
-	$('#queue-list').append($('<li class="list-group-item">').text(queue_name+" / "+queue_colour+" / "+queue_size));
 
-	var queue_item = [];
-	queue_item.push(queue_name);
-	queue_item.push(queue_colour);
-	queue_item.push(queue_size);
-	queue_list.push(queue_item);
+	if (queue_category && queue_name && queue_size) {
+		$('#queue-list').append($('<li class="list-group-item shopping-item">').html($('#category')[0][category_index].innerHTML+": "+queue_name+" - "+queue_colour+" ("+queue_size+") <p class=\"delete-hint\">delete</p>"));
+		// $('.shopping-item').append()
+
+		var queue_item = [];
+		queue_item.push(queue_category);
+		queue_item.push(queue_name);
+		queue_item.push(queue_colour);
+		queue_item.push(queue_size);
+		queue_list.push(queue_item);
+
+		document.getElementById("category").value = "";
+		document.getElementById("keywords").value = "";
+		document.getElementById("colour").value = "";
+		document.getElementById("size").value = "";
+	}
+	else {
+		$('#keyword-alert')[0].style.display = 'block';
+	}
 });
+
+$("#queue-list").on("click", ".shopping-item", function(event) {
+	var i = $(this).index();
+	console.log(i);
+
+	queue_list.splice(i-1, 1);
+	$('#queue-list li').eq(i).remove();
+});
+
+$('#keyword-alert-dismiss').click(function() {
+	$('#keyword-alert')[0].style.display = 'none';
+});
+
+setInterval(function() {
+	var d = new Date();
+	document.getElementById('shopping-date').innerText = d.toDateString();
+}, 100);
