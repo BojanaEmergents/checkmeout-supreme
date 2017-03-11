@@ -41,4 +41,11 @@
 			}
 		});
 	}, 50);
+
+	chrome.storage.sync.get({
+		name: ''
+	},
+	function(items) {
+		document.getElementById("welcome").innerText = "Welcome, " + items.name.split(' ')[0];
+	});
 });

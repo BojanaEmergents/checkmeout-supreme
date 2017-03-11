@@ -10,39 +10,40 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
 	<link href="css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/animate.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 	<style>
 		@font-face {
-    		font-family: Futura;
-    		src: url(/fonts/futura-heavy-oblique.otf);
+			font-family: Futura;
+			src: url(/fonts/futura-heavy-oblique.otf);
 		}
 		@font-face {
-    		font-family: MerchantCopy;
-    		src: url(/fonts/merchant-copy.ttf);
+			font-family: MerchantCopy;
+			src: url(/fonts/merchant-copy.ttf);
 		}
 
 		body {
 			padding: 25px;
-			padding-top: 100px;
+			padding-top: 70px;
 			background-color: #f8f8f8;
 			font-family: "Roboto" !important;
-    	}
-    	select {
-    		padding: 6px;
-    		border-radius: 5px;
-    	}
-    	hr {
-    		border: solid 1px #333;
-    	}
-    	.header-image {
-    		width: 40px;
-    		margin: 10px;
-    	}
-    	.header-text {
-    		padding-right: 25px;
-    		float: right;
-    	}
+		}
+		select {
+			padding: 6px;
+			border-radius: 5px;
+		}
+		hr {
+			border: solid 1px #777;
+		}
+		.header-image {
+			width: 40px;
+			margin: 10px;
+		}
+		.header-text {
+			padding-right: 25px;
+			float: right;
+		}
 
 		/* some bootstrap theme-ery */
 		a {color: rgb(237, 30, 36);}
@@ -56,9 +57,14 @@
 			padding-right: 20px;
 		}
 
-    	textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus, select:focus {   
+		.form-control {
+			box-shadow: none;
+		}
+
+		textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus, select:focus {   
 			border-color: rgba(237, 30, 36, 0.8);
-			box-shadow: 0 1px 1px rgba(237, 30, 36, 0.075) inset, 0 0 8px rgba(237, 30, 36, 0.6);
+			// box-shadow: 0 1px 1px rgba(237, 30, 36, 0.075) inset, 0 0 8px rgba(237, 30, 36, 0.6);
+			box-shadow: 0 1px 1px rgba(237, 30, 36, 0) inset, 0 0 8px rgba(237, 30, 36, 0);
 			outline: 0 none;
 		}
 
@@ -86,6 +92,12 @@
 
 		.btn-clear {
 			float: right;
+			background-color: #f8f8f8;
+			transition: border-color ease-in-out 0.25s;
+		}
+		.btn-clear:hover {
+			border: 1px solid rgb(237, 30, 36);
+			background-color: #f8f8f8;
 		}
 
 		#add-queue {
@@ -121,7 +133,6 @@
 		}
 
 		.shopping-item:hover {
-			//background-color: #ffc5c4;
 			border-right: 8px solid red;
 		}
 		.shopping-item:hover > .delete-hint {
@@ -157,6 +168,15 @@
 			display: none;
 		}
 
+		#address2-col {
+			padding-left: 0;
+			padding-right: 5px;
+		}
+		#address3-col {
+			padding-left: 5px;
+			padding-right: 0;
+		}
+
 		::selection {
 			color: #f8f8f8;
 			background: rgb(237, 30, 36); /* WebKit/Blink Browsers */
@@ -165,10 +185,57 @@
 			color: #f8f8f8;
 			background: rgb(237, 30, 36); /* Gecko Browsers */
 		}
-    </style>
+	</style>
 
 </head>
 <body>
+
+	<!-- debug modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="debug-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Debug log</h4>
+				</div>
+				<div class="modal-body">
+					<pre id="log-out"></pre>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default" data-clipboard-target="#log-out"><i class="fa fa-clipboard"></i> Copy to clipboard</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- about modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="about-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">About</h4>
+				</div>
+				<div class="modal-body">
+					<h4>Open source technologies</h4>
+					<p>We <i class="fa fa-heart"></i> open source</p>
+					<ul>
+						<li><a href="https://getbootstrap.com">Bootstrap</a></li>
+						<li><a href="http://bootstrap-notify.remabledesigns.com/">Bootstrap-notify</a></li>
+						<li><a href="https://clipboardjs.com/">Clipboard.js</a></li>
+						<li><a href="https://jquery.com/">JQuery</a></li>
+						<li><a href="http://fontawesome.io/">Font Awesome</a></li>
+						<li><a href="https://daneden.github.io/animate.css/">Animate.css</a></li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<p>&copy; Copyright 2017, Check Me Out Ltd.</p>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
@@ -178,27 +245,37 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
-      			</button>
+				</button>
 
-				<a class="navbar-brand" href="https://checkmeout.pro"><span class="logo-lred">Check</span><span class="logo-dred">Me</span><span class="logo-orange">Out</span> for Supreme &nbsp;<span class="badge">3.0&nbsp;</span></a>
-
+				<a class="navbar-brand" href="https://checkmeout.pro"><span class="logo-lred">Check</span><span class="logo-dred">Me</span><span class="logo-orange">Out</span> for Supreme &nbsp;<span class="badge" id="ver"></span></a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li><a href="" id="eu">EU</a></li>
 					<li><a href="" id="us">US</a></li>
-					<!-- <li><a href="" id="jp">JP</a></li> -->
+					<li><a href="" id="jp">JP</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Advanced <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#" id="show-log" data-toggle="modal" data-target="#debug-modal">Debug log</a></li>
+							<li><a href="#" id="delete-all">Delete all saved data</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#" data-toggle="modal" data-target="#about-modal">About</a></li>
+						</ul>
+					</li>
 				</ul>
+				<p class="navbar-text navbar-right">Follow us on <a href="https://instagram.com/checkmeoutbots">Instagram</a> to stay up to date with news and giveaways!</p>
 			</div>
-			<p class="navbar-text navbar-right">Follow us on <a href="https://instagram.com/checkmeoutbots">Instagram</a> to stay up to date with news and giveaways!</p>
 		</div>
 	</nav>
 
-    <div class="container-fluid">
+	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-6">
 				<!-- <div id="status"></div> -->
 				<h3>
 					<i class="fa fa-truck" aria-hidden="true"></i>&nbsp; Shipping information
-					<button class="btn btn-default btn-clear" id="clear-shipping"><i class="fa fa-close" aria-hidden="true"></i></button>
+					<button class="btn btn-default btn-clear" id="clear-shipping">clear</button>
 				</h3>
 				<hr>
 				<form class="form-horizontal" role="form">
@@ -240,6 +317,17 @@
 					</div>
 					<div class="form-group">
 						 
+						<div class="col-sm-offset-2 col-sm-10">
+							<div class="col-xs-6" id="address2-col">
+								<input type="text" class="form-control" id="address2" placeholder="optional">
+							</div>
+							<div class="col-xs-6" id="address3-col">
+								<input type="text" class="form-control" id="address3" placeholder="optional">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						 
 						<label for="city" class="col-sm-2 control-label">
 							City
 						</label>
@@ -264,6 +352,64 @@
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="state">
 							<p>2 letter code as it appears on Supreme</p>
+						</div>
+					</div>
+					<div class="form-group" id="jp-prefecture">
+						 
+						<label for="prefecture" class="col-sm-2 control-label">
+							Prefecture
+						</label>
+						<div class="col-sm-10">
+							<select id="prefecture">
+								<option value="">--</option>
+								<option value=" 北海道"> 北海道</option>
+								<option value=" 青森県"> 青森県</option>
+								<option value=" 岩手県"> 岩手県</option>
+								<option value=" 宮城県"> 宮城県</option>
+								<option value=" 秋田県"> 秋田県</option>
+								<option value=" 山形県"> 山形県</option>
+								<option value=" 福島県"> 福島県</option>
+								<option value=" 茨城県"> 茨城県</option>
+								<option value=" 栃木県"> 栃木県</option>
+								<option value=" 群馬県"> 群馬県</option>
+								<option value=" 埼玉県"> 埼玉県</option>
+								<option value=" 千葉県"> 千葉県</option>
+								<option value=" 東京都"> 東京都</option>
+								<option value=" 神奈川県"> 神奈川県</option>
+								<option value=" 新潟県"> 新潟県</option>
+								<option value=" 富山県"> 富山県</option>
+								<option value=" 石川県"> 石川県</option>
+								<option value=" 福井県"> 福井県</option>
+								<option value=" 山梨県"> 山梨県</option>
+								<option value=" 長野県"> 長野県</option>
+								<option value=" 岐阜県"> 岐阜県</option>
+								<option value=" 静岡県"> 静岡県</option>
+								<option value=" 愛知県"> 愛知県</option>
+								<option value=" 三重県"> 三重県</option>
+								<option value=" 滋賀県"> 滋賀県</option>
+								<option value=" 京都府"> 京都府</option>
+								<option value=" 大阪府"> 大阪府</option>
+								<option value=" 兵庫県"> 兵庫県</option>
+								<option value=" 奈良県"> 奈良県</option>
+								<option value=" 和歌山県"> 和歌山県</option>
+								<option value=" 鳥取県"> 鳥取県</option>
+								<option value=" 島根県"> 島根県</option>
+								<option value=" 岡山県"> 岡山県</option>
+								<option value=" 広島県"> 広島県</option>
+								<option value=" 山口県"> 山口県</option>
+								<option value=" 徳島県"> 徳島県</option>
+								<option value=" 香川県"> 香川県</option>
+								<option value=" 愛媛県"> 愛媛県</option>
+								<option value=" 高知県"> 高知県</option>
+								<option value=" 福岡県"> 福岡県</option>
+								<option value=" 佐賀県"> 佐賀県</option>
+								<option value=" 長崎県"> 長崎県</option>
+								<option value=" 熊本県"> 熊本県</option>
+								<option value=" 大分県"> 大分県</option>
+								<option value=" 宮崎県"> 宮崎県</option>
+								<option value=" 鹿児島県"> 鹿児島県</option>
+								<option value=" 沖縄県"> 沖縄県</option>
+							</select>
 						</div>
 					</div>
 					<div class="form-group">
@@ -311,6 +457,8 @@
 								<option value="">--</option>
 								<option value="USA">USA</option>
 								<option value="CANADA">CANADA</option>
+								<option value="">--</option>
+								<option value="JP">JAPAN</option>
 							</select>
 						</div>
 					</div>
@@ -319,7 +467,7 @@
 			<div class="col-md-6">
 				<h3>
 					<i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp; Payment information
-					<button class="btn btn-default btn-clear" id="clear-payment"><i class="fa fa-close" aria-hidden="true"></i></button>
+					<button class="btn btn-default btn-clear" id="clear-payment">clear</button>
 				</h3>
 				<hr>
 				<form class="form-horizontal" role="form">
@@ -330,11 +478,14 @@
 						</label>
 						<div class="col-sm-10">
 							<select id="card_type">
-	 							<option value="visa">Visa</option>
-	 							<option value="american_express">American Express</option>
-	 							<option value="master">Mastercard</option>
-	 							<option value="solo">Solo</option>
-	 						</select>
+								<option value="visa">Visa</option>
+								<option value="american_express">American Express</option>
+								<option value="master">Mastercard</option>
+								<option value="solo">Solo</option>
+								<option value="paypal">PayPal</option>
+								<option value="jcb">JCB</option>
+								<option value="cod">Cash on Delivery (JP only)</option>
+							</select>
 						</div>
 					</div>
 					<div class="form-group">
@@ -371,6 +522,22 @@
 						</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="cvv">
+						</div>
+					</div>
+					<div class="form-group" id="alt-size-group">
+ 
+						<label for="alt-size" class="col-sm-2 control-label">
+							Size
+						</label>
+						<div class="col-sm-10">
+							<select id="alt-size">
+								<option value="Small">Small</option>
+								<option value="Medium">Medium</option>
+								<option value="Large">Large</option>
+								<option value="XLarge">XLarge</option>
+								<option value="">--</option>
+								<option value="One size">One size</option>
+							</select>
 						</div>
 					</div>
 					<div class="form-group">
@@ -423,7 +590,7 @@
 			<div class="col-md-6" id="keyword-section">
 					<h3>
 						<i class="fa fa-search" aria-hidden="true"></i>&nbsp; Keyword search (<a href="https://checkmeout.pro/instructions">instructions</a>)
-						<button class="btn btn-default btn-clear" id="clear-keywords"><i class="fa fa-close" aria-hidden="true"></i></button>
+						<button class="btn btn-default btn-clear" id="clear-keywords">clear</button>
 					</h3>
 					<hr>
 
@@ -444,88 +611,89 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							 
-							<label for="category" class="col-sm-2 control-label">
-								Auto-start
-							</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-			      					<span class="input-group-addon">
-			        					<input type="checkbox" id="ar_enabled" aria-label="...">&nbsp; Run at:
-			     					</span>
-			      					<input type="text" class="form-control" id="start_time" aria-label="...">
-		    					</div>
-		    					<p>24H time in format HH:MM:SS (your machine time, not the time on supremenewyork.com). We recommend <a href="https://time.is/">time.is</a> for setting your time accurately.</p>
+						<div id="kw-form-group">
+							<div class="form-group">
+								 
+								<label for="category" class="col-sm-2 control-label">
+									Auto-start
+								</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<span class="input-group-addon">
+											<input type="checkbox" id="ar_enabled" aria-label="...">&nbsp; Run at:
+										</span>
+										<input type="text" class="form-control" id="start_time" aria-label="...">
+									</div>
+									<p>24H time in format HH:MM:SS (your machine time, not the time on supremenewyork.com). We recommend <a href="https://time.is/">time.is</a> for setting your time accurately.</p>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							 
-							<label for="category" class="col-sm-2 control-label">
-								Category
-							</label>
-							<div class="col-sm-10">
-								<select id="category">
-		 							<option value="jackets">Jackets</option>
-		 							<option value="shirts">Shirts</option>
-		 							<option value="tops_sweaters">Tops/Sweaters</option>
-		 							<option value="sweatshirts">Sweatshirts</option>
-		 							<option value="pants">Pants</option>
-		 							<option value="shorts">Shorts</option>
-		 							<option value="t-shirts">T-Shirts</option>
-		 							<option value="hats">Hats</option>
-		 							<option value="bags">Bags</option>
-		 							<option value="accessories">Accessories</option>
-		 							<option value="skate">Skate</option>
-		 						</select>
+							<div class="form-group">
+								 
+								<label for="category" class="col-sm-2 control-label">
+									Category
+								</label>
+								<div class="col-sm-10">
+									<select id="category">
+										<option value="jackets">Jackets</option>
+										<option value="shirts">Shirts</option>
+										<option value="tops_sweaters">Tops/Sweaters</option>
+										<option value="sweatshirts">Sweatshirts</option>
+										<option value="pants">Pants</option>
+										<option value="shorts">Shorts</option>
+										<option value="t-shirts">T-Shirts</option>
+										<option value="hats">Hats</option>
+										<option value="bags">Bags</option>
+										<option value="accessories">Accessories</option>
+										<option value="skate">Skate</option>
+									</select>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							 
-							<label for="keywords" class="col-sm-2 control-label">
-								Keywords
-							</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="keywords" data-toggle="tooltip" data-trigger="manual" data-placement="right" title="Make sure to enable keywords above!">
-								<p>Separated by spaces. Including words that are not in the product description will cause the search to fail.</p>
+							<div class="form-group">
+								 
+								<label for="keywords" class="col-sm-2 control-label">
+									Keywords
+								</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="keywords" data-toggle="tooltip" data-trigger="manual" data-placement="right" title="Make sure to enable keywords above!">
+									<p>Separated by spaces. Including words that are not in the product name will cause the search to fail.</p>
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							 
-							<label for="colour" class="col-sm-2 control-label">
-								Colour
-							</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="colour">
-								<p>Separated by spaces. As above, must contain no incorrect words.</p>		
+							<div class="form-group">
+								 
+								<label for="colour" class="col-sm-2 control-label">
+									Colour
+								</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="colour">
+									<p>Separated by spaces. As above, must contain no incorrect words.</p>		
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
- 
-							<label for="size" class="col-sm-2 control-label">
-								Size
-							</label>
-							<div class="col-sm-10">
-								<select id="size">
-									<option value="Small">Small</option>
-		 							<option value="Medium">Medium</option>
-		 							<option value="Large">Large</option>
-		 							<option value="XLarge">XLarge</option>
-		 							<option value="">--</option>
-		 							<option value="One size">One size</option>
-		 						</select>
+							<div class="form-group">
+	 
+								<label for="size" class="col-sm-2 control-label">
+									Size
+								</label>
+								<div class="col-sm-10">
+									<select id="size">
+										<option value="Small">Small</option>
+										<option value="Medium">Medium</option>
+										<option value="Large">Large</option>
+										<option value="XLarge">XLarge</option>
+										<option value="">--</option>
+										<option value="One size">One size</option>
+									</select>
+								</div>
 							</div>
-						</div>
 
-						<div class="form-group">
-							 
-							<div class="col-sm-offset-2 col-sm-10">
-								<button type="button" id="add-queue" class="btn btn-default">
-									Add to shopping list &nbsp;<i class="fa fa-arrow-right"></i>
-								</button>
+							<div class="form-group">
+								 
+								<div class="col-sm-offset-2 col-sm-10">
+									<button type="button" id="add-queue" class="btn btn-default">
+										Add to shopping list &nbsp;<i class="fa fa-arrow-right"></i>
+									</button>
+								</div>
 							</div>
 						</div>
-
 					</form>
 				</div>
 				<div class="col-md-6">
@@ -533,7 +701,7 @@
 						<i class="fa fa-check" aria-hidden="true"></i>&nbsp; Finalise
 					</h3>
 					<hr>
-					<div class="form-group">
+					<div class="form-group" id="shopping-list-group">
 							 
 						<label for="queue-list" class="col-sm-2 control-label" style="text-align: right">
 							Shopping list
@@ -574,12 +742,12 @@
 		</div>
 	</div>
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/scripts.js"></script>
-    <script src="options.js"></script>
-    <script src="tc.js"></script>
-    <script src="country.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-notify.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="options.js"></script>
+	<script src="country.js"></script>
 	<script src="js/popup/analytics.js"></script>
 
   </body>

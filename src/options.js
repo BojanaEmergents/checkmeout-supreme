@@ -4,9 +4,12 @@ function save_options() {
 	var email = document.getElementById("email").value;
 	var phone = document.getElementById("phone").value;
 	var address = document.getElementById("address").value;
+	var address2 = document.getElementById("address2").value;
+	var address3 = document.getElementById("address3").value;
 	var city = document.getElementById("city").value;
 	var zip = document.getElementById("zip").value;
-	var state = document.getElementById("state").value;
+	var state = document.getElementById("state").value.toUpperCase();
+	var prefecture = document.getElementById("prefecture").value;
 	var country = document.getElementById("country").value;
 
 	var card_type = document.getElementById("card_type").value;
@@ -14,6 +17,7 @@ function save_options() {
 	var expiry_month = document.getElementById("expiry_month").value;
 	var expiry_year = document.getElementById("expiry_year").value;
 	var cvv = document.getElementById("cvv").value;
+	var alt_size = document.getElementById("alt-size").value;
 	var any_size = document.getElementById("any_size").checked;
 	var autoco = document.getElementById("autoco").checked;
 	var tryagain = document.getElementById("tryagain").checked;
@@ -33,9 +37,12 @@ function save_options() {
 		email: email,
 		phone: phone,
 		address: address,
+		address2: address2,
+		address3: address3,
 		city: city,
 		zip: zip,
 		state: state,
+		prefecture: prefecture,
 		country: country,
 
 		card_type: card_type,
@@ -43,6 +50,7 @@ function save_options() {
 		expiry_month: expiry_month,
 		expiry_year: expiry_year,
 		cvv: cvv,
+		alt_size: alt_size,
 		any_size: any_size,
 		autoco: autoco,
 		tryagain: tryagain,
@@ -59,11 +67,19 @@ function save_options() {
 		//tc_accepted: tc_accepted
 	}, 
 	function() {
-		// Update status to let user know options were saved.
-		$("#status")[0].style.display = 'block';
-		setTimeout(function() {
-			$("#status")[0].style.display = 'none';
-		}, 2000);
+		// Show notification to let user know options were saved.
+		$.notify({
+			title: "<b>Success</b><br>",
+			message: "Your settings have been saved successfully."
+		},
+		{
+			type: 'success',
+			animate: {
+				enter: 'animated fadeInDown',
+				exit: 'animated fadeOutUp'
+			},
+			delay: 2000
+		});
 	});
 }
 
@@ -75,9 +91,12 @@ function restore_options() {
 		email: '',
 		phone: '',
 		address: '',
+		address2: '',
+		address3: '',
 		city: '',
 		zip: '',
 		state: '',
+		prefecture: '',
 		country: '',
 
 		card_type: '',
@@ -85,6 +104,7 @@ function restore_options() {
 		expiry_month: '',
 		expiry_year: '',
 		cvv: '',
+		alt_size: '',
 		any_size: '',
 		autoco: '',
 		tryagain: '',
@@ -97,17 +117,23 @@ function restore_options() {
 		keywords: '',
 		colour: '',
 		size: '',
-		queue: '',
+		queue: [],
+		report: '',
 		//tc_accepted: ''
 	}, 
 	function(items) {
+		document.getElementById("log-out").innerText = JSON.stringify(items.report, null, 2);
+
 		document.getElementById('name').value = items.name;
 		document.getElementById("email").value = items.email;
 		document.getElementById("phone").value = items.phone;
 		document.getElementById("address").value = items.address;
+		document.getElementById("address2").value = items.address2;
+		document.getElementById("address3").value = items.address3;
 		document.getElementById("city").value = items.city;
 		document.getElementById("zip").value = items.zip;
 		document.getElementById("state").value = items.state;
+		document.getElementById("prefecture").value = items.prefecture;
 		document.getElementById("country").value = items.country;
 
 		document.getElementById("card_type").value = items.card_type;
@@ -115,6 +141,7 @@ function restore_options() {
 		document.getElementById("expiry_month").value = items.expiry_month;
 		document.getElementById("expiry_year").value = items.expiry_year;
 		document.getElementById("cvv").value = items.cvv;
+		document.getElementById("alt-size").value = items.alt_size;
 		document.getElementById("any_size").checked = items.any_size;
 		document.getElementById("autoco").checked = items.autoco;
 		document.getElementById("tryagain").checked = items.tryagain;
@@ -133,12 +160,24 @@ function restore_options() {
 		for (item in items.queue) {
 			$('#queue-list').append($('<li class="list-group-item shopping-item">').html(items.queue[item][0]+": "+items.queue[item][1]+" - "+items.queue[item][2]+" ("+items.queue[item][3]+") <p class=\"delete-hint\">delete</p>"));
 		}
+
+		if (items.kw_enabled) {
+			document.getElementById("alt-size-group").hidden = true;
+			document.getElementById("kw-form-group").hidden = false;
+		}
+		else {
+			document.getElementById("alt-size-group").hidden = false;
+			document.getElementById("kw-form-group").hidden = true;
+		}
+
+		document.getElementById("ver").innerHTML = chrome.runtime.getManifest().version + "&nbsp;";
 	});
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
 
+// update delay text when user moves the slider
 function update_delay() {
 	document.getElementById("delay_text").innerText = document.getElementById("delay").value + " seconds";
 	if (document.getElementById("delay").value <= 2.5) {
@@ -150,10 +189,15 @@ function update_delay() {
 }
 document.getElementById("delay").addEventListener("input", update_delay);
 
+// enable bootstrap tooltips
 $(function () {
 	$('[data-toggle="tooltip"]').tooltip()
 })
 
+// set up clipboard
+new Clipboard('.btn');
+
+// show warning if user enters keywords without enabling them
 $('#keywords').on('input propertychange paste', function() {
 	if (!$('#kw_enabled').is(':checked')) {
 		$('#keywords').tooltip('show');
@@ -163,14 +207,18 @@ $('#keywords').on('input propertychange paste', function() {
 	}
 });
 
+// clear sections
 $("#clear-shipping").click(function() {
 	document.getElementById('name').value = "";
 	document.getElementById("email").value = "";
 	document.getElementById("phone").value = "";
 	document.getElementById("address").value = "";
+	document.getElementById("address2").value = "";
+	document.getElementById("address3").value = "";
 	document.getElementById("city").value = "";
 	document.getElementById("zip").value = "";
 	document.getElementById("state").value = "";
+	document.getElementById("prefecture").value = "";
 	document.getElementById("country").value = "";
 });
 $("#clear-payment").click(function() {
@@ -195,6 +243,12 @@ $("#clear-keywords").click(function() {
 	document.getElementById("size").value = "";
 });
 
+// delete all data
+$("#delete-all").click(function() {
+	chrome.storage.sync.clear();
+});
+
+// add an item to the shopping list
 $('#add-queue').click(function() {
 	var queue_category = $('#category')[0].value;
 	var category_index = $('#category')[0].selectedIndex;
@@ -204,7 +258,6 @@ $('#add-queue').click(function() {
 
 	if (queue_category && queue_name && queue_size) {
 		$('#queue-list').append($('<li class="list-group-item shopping-item">').html($('#category')[0][category_index].innerHTML+": "+queue_name+" - "+queue_colour+" ("+queue_size+") <p class=\"delete-hint\">delete</p>"));
-		// $('.shopping-item').append()
 
 		var queue_item = [];
 		queue_item.push(queue_category);
@@ -217,25 +270,70 @@ $('#add-queue').click(function() {
 		document.getElementById("keywords").value = "";
 		document.getElementById("colour").value = "";
 		document.getElementById("size").value = "";
+
+		$.notify({
+			title: "<b>Success</b><br>",
+			message: "Item added to shopping list."
+		},
+		{
+			type: 'success',
+			animate: {
+				enter: 'animated fadeInDown',
+				exit: 'animated fadeOutUp'
+			},
+			delay: 2000
+		});
 	}
 	else {
 		$('#keyword-alert')[0].style.display = 'block';
 	}
 });
 
+// delete an item from the shopping list
 $("#queue-list").on("click", ".shopping-item", function(event) {
 	var i = $(this).index();
-	console.log(i);
-
 	queue_list.splice(i-1, 1);
 	$('#queue-list li').eq(i).remove();
+
+	$.notify({
+			title: "<b>Success</b><br>",
+			message: "Item removed from shopping list."
+		},
+		{
+			type: 'success',
+			animate: {
+				enter: 'animated fadeInDown',
+				exit: 'animated fadeOutUp'
+			},
+			delay: 2000
+		});
 });
 
 $('#keyword-alert-dismiss').click(function() {
 	$('#keyword-alert')[0].style.display = 'none';
 });
 
+// update shopping list date
 setInterval(function() {
 	var d = new Date();
 	document.getElementById('shopping-date').innerText = d.toDateString();
-}, 100);
+}, 1000);
+
+// disable save button unless user accepts t&cs
+document.getElementById("save").disabled = !document.getElementById("tc_accepted").checked;
+document.getElementById("tc_accepted").addEventListener("click", tc_button);
+function tc_button() {
+	document.getElementById('save').disabled = !document.getElementById("tc_accepted").checked;
+}
+
+// hide/show sections when keywords are enabled/disabled
+$('#kw_enabled').click(function() {
+	if (document.getElementById('kw_enabled').checked) {
+		document.getElementById("alt-size-group").hidden = true;
+		document.getElementById("kw-form-group").hidden = false;
+	}
+	else {
+		document.getElementById("alt-size-group").hidden = false;
+		document.getElementById("kw-form-group").hidden = true;
+	}
+});

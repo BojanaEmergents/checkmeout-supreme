@@ -1,3 +1,33 @@
+v3.5
+====
+Fixed JP store size select/add to cart
+Fixed JP autofill
+
+v3.4
+====
+Added PayPal checkout
+Added debug log feature
+Fixed bug in size selection
+Added dynamic version number on options page
+Added delete all feature
+Added about section
+Added welcome message
+
+v3.3
+====
+Added more address lines
+New 'saved sucessfully' notification
+
+v3.2
+====
+Increased delay between final item and check out
+Added non-keyword item size picker
+Finished Japan autofill support
+
+v3.1
+====
+Queue bug fix
+
 v3.0
 ====
 Finished queue system

@@ -24,8 +24,20 @@ function setEU() {
 		region: "eu"
 	});
 	document.getElementById("keyword-section").hidden = false;
-
 	document.getElementById("us-state").hidden = true;
+	document.getElementById("jp-prefecture").hidden = true;
+	document.getElementById("shopping-list-group").hidden = false;
+
+	$.notify({
+			message: "Set region to EU."
+		},
+		{
+			animate: {
+				enter: 'animated fadeInDown',
+				exit: 'animated fadeOutUp'
+			},
+			delay: 2000
+		});
 }
 
 function setUS() {
@@ -33,8 +45,20 @@ function setUS() {
 		region: "us"
 	});
 	document.getElementById("keyword-section").hidden = false;
-
 	document.getElementById("us-state").hidden = false;
+	document.getElementById("jp-prefecture").hidden = true;
+	document.getElementById("shopping-list-group").hidden = false;
+
+	$.notify({
+			message: "Set region to US."
+		},
+		{
+			animate: {
+				enter: 'animated fadeInDown',
+				exit: 'animated fadeOutUp'
+			},
+			delay: 2000
+		});
 }
 
 function setJP() {
@@ -42,6 +66,19 @@ function setJP() {
 		region: "jp"
 	});
 	document.getElementById("keyword-section").hidden = true;
-
 	document.getElementById("us-state").hidden = true;
+	document.getElementById("jp-prefecture").hidden = false;
+	document.getElementById("alt-size-group").hidden = false;
+	document.getElementById("shopping-list-group").hidden = true;
+
+	$.notify({
+			message: "Set region to JP."
+		},
+		{
+			animate: {
+				enter: 'animated fadeInDown',
+				exit: 'animated fadeOutUp'
+			},
+			delay: 2000
+		});
 }
