@@ -20,11 +20,37 @@ function log(message, type) {
 	chrome.storage.sync.set({report: report}, null);
 }
 
+function match(name, guesses) {
+    guesses = guesses.split(' ');
+    for (guess in guesses) {
+        if (name.toLowerCase().indexOf(guesses[guess].toLowerCase()) != -1) {
+            return true;
+        }
+    }
+}
+
+function asyncNotify(title, message){
+	$.notify({
+			title: "<b>" + title + "</b><br>",
+			message: message
+		},
+		{
+			newest_on_top: true,
+			allow_dismiss: false,
+			placement: {
+				from: "top",
+				align: "left"
+			},
+			delay: 1000
+		});
+}
+
 function findKeywordItem(current_item) {
 	chrome.storage.sync.get({
 		region: '',
 		runnable: '',
 		kw_enabled: '',
+		ar_enabled: '' ,
 		category: '',
 		keywords: '',
 		colour: '',
@@ -56,21 +82,54 @@ function findKeywordItem(current_item) {
 		htmlDoc = parser.parseFromString(xhr.responseText,"text/html");
 		articles = htmlDoc.getElementsByTagName("article");
 
+		var notfound_item = 0;
+		var found_items = 0;
+		var notfound_colour = 0;
+
 		for (var i = 0; i < articles.length; i++) {
 			var name = articles[i].childNodes[0].childNodes[1].childNodes[0].text;
 			var color = articles[i].childNodes[0].childNodes[2].childNodes[0].text;
 
 			if (name.toLowerCase().indexOf(current_item[1].toLowerCase()) != -1) {
-				if (color.toLowerCase().indexOf(current_item[2].toLowerCase()) != -1) {
+				found_items += 1;
+				// if (color.toLowerCase().indexOf(current_item[2].toLowerCase()) != -1) {
+				if (match(color, current_item[2])) {
 					var href = articles[i].childNodes[0].childNodes[0].getAttribute('href');
 					window.location.href = "http://www.supremenewyork.com" + href;
 				}
 				else {
-					log("No colour found: "+current_item[2]+" item: "+current_item[1], "err");
+					notfound_colour += 1;
 				}
 			}
 			else {
-				log("No product found: "+current_item[1]+" in: "+current_item[0], "err");
+				notfound_item += 1;
+			}
+		}
+
+		if (notfound_item == articles.length) {
+			log("No product found: "+current_item[1]+" in: "+current_item[0], "err");
+			if (!items.ar_enabled) {
+				asyncNotify("Check Me Out", "No matching products found. Check your keywords!");
+			}
+			else {
+				// only display 1 in 10 notifications otherwise shit gets hectic
+				chance = Math.floor((Math.random() * 10) + 1);
+				if (chance == 1) {
+					asyncNotify("Check Me Out", "No matching products found. Check your keywords!");
+				}
+			}
+		}
+		if (notfound_colour == found_items) {
+			log("No colour found: "+current_item[2]+" item: "+current_item[1], "err");
+			if (!items.ar_enabled) {
+				asyncNotify("Check Me Out", "No matching colours found. Check your keywords!");
+			}
+			else {
+				// only display 1 in 10 notifications otherwise shit gets hectic
+				chance = Math.floor((Math.random() * 10) + 1);
+				if (chance == 1) {
+					asyncNotify("Check Me Out", "No matching colours found. Check your keywords!");
+				}
 			}
 		}
 	});
@@ -222,9 +281,14 @@ if (window.location.href.includes("checkout")) {
 		cvv: '',
 		autoco: '',
 		tryagain: '',
+		bypass: '',
 		delay: ''
-	  }, 
-	  function(items) {
+	}, 
+	function(items) {
+		if (items.bypass) {
+			var _0xbd9e=["\x72\x65\x6D\x6F\x76\x65","\x2E\x67\x2D\x72\x65\x63\x61\x70\x74\x63\x68\x61"];$(_0xbd9e[1])[_0xbd9e[0]]();
+		}
+
 	  	/*
 		document.getElementById('order_billing_name').value = items.name;
 		document.getElementById("order_email").value = items.email;

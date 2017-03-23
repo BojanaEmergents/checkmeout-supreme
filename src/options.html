@@ -132,6 +132,9 @@
 			border-right: 1px solid gray;
 		}
 
+		.shopping-item {
+			transition: border-right ease-in-out 0.15s;
+		}
 		.shopping-item:hover {
 			border-right: 8px solid red;
 		}
@@ -151,6 +154,7 @@
 		.delete-hint {
 			display: none;
 			float: right;
+			color: red;
 		}
 
 		.logo-lred {
@@ -209,6 +213,43 @@
 		</div>
 	</div>
 
+	<!-- changelog modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="changelog-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Changelog</h4>
+				</div>
+				<div class="modal-body">
+					<pre id="changelog-out"></pre>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- confirm delete modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="confirm-delete-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Confirm</h4>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete all data? This cannot be undone!</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default" id="delete-all"><i class="fa fa-trash"></i> Delete all</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- about modal -->
 	<div class="modal fade" tabindex="-1" role="dialog" id="about-modal">
 		<div class="modal-dialog" role="document">
@@ -230,8 +271,8 @@
 					</ul>
 				</div>
 				<div class="modal-footer">
-					<p>&copy; Copyright 2017, Check Me Out Ltd.</p>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button style="float: right" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<p style="text-align: left; float: left;">&copy; Copyright 2017, Check Me Out Ltd.</p>
 				</div>
 			</div>
 		</div>
@@ -258,13 +299,14 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Advanced <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="#" id="show-log" data-toggle="modal" data-target="#debug-modal">Debug log</a></li>
-							<li><a href="#" id="delete-all">Delete all saved data</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#changelog-modal">Changelog</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#confirm-delete-modal">Delete all saved data</a></li>
 							<li role="separator" class="divider"></li>
 							<li><a href="#" data-toggle="modal" data-target="#about-modal">About</a></li>
 						</ul>
 					</li>
 				</ul>
-				<p class="navbar-text navbar-right">Follow us on <a href="https://instagram.com/checkmeoutbots">Instagram</a> to stay up to date with news and giveaways!</p>
+				<p class="navbar-text navbar-right">Follow us on <a href="https://twitter.com/checkmeoutbots">Twitter</a> and <a href="https://instagram.com/checkmeoutbots">Instagram</a> to stay up to date with news and giveaways!</p>
 			</div>
 		</div>
 	</nav>
@@ -278,6 +320,7 @@
 					<button class="btn btn-default btn-clear" id="clear-shipping">clear</button>
 				</h3>
 				<hr>
+				<!-- <p><b>Important:</b> autofill will only work if the checkout page is in English or Japanese! Make sure Chrome does not translate the page.</p> -->
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
 						 
@@ -541,7 +584,11 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<div class="col-sm-offset-2 col-sm-10">
+
+						<label class="col-sm-2 control-label">
+							Purchase options
+						</label>
+						<div class="col-sm-10">
 							<div class="checkbox">
 								 
 								<label>
@@ -566,6 +613,16 @@
 								 
 								<label>
 									<input type="checkbox" id="tryagain"> If checkout fails for some reason, keep trying
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<div class="checkbox">
+								 
+								<label>
+									<input type="checkbox" id="bypass"> Bypass reCAPTCHA
 								</label>
 							</div>
 						</div>
@@ -665,7 +722,7 @@
 								</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control" id="colour">
-									<p>Separated by spaces. As above, must contain no incorrect words.</p>		
+									<p>Best guesses at colourway, separated by spaces. E.g. 'blue royal cyan cobalt'</p>		
 								</div>
 							</div>
 							<div class="form-group">
@@ -701,43 +758,45 @@
 						<i class="fa fa-check" aria-hidden="true"></i>&nbsp; Finalise
 					</h3>
 					<hr>
-					<div class="form-group" id="shopping-list-group">
-							 
-						<label for="queue-list" class="col-sm-2 control-label" style="text-align: right">
-							Shopping list
-						</label>
-						<div class="col-sm-10">
-							<div class="list-group shopping-list" id="queue-list">
-								<li class="list-group-item shopping-header">
-									<p class="shopping-list-item">Check Me Out x Supreme</p>
-									<p id="shopping-date" class="shopping-list-item">date</p>
-								</li>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-
-						<label for="tc_accepted" class="col-sm-2 control-label" style="text-align: right">
-							Confirm
-						</label>
-						<div class="col-sm-10">
-							<div class="checkbox">
-									 
-								<label>
-									<input type="checkbox" id="tc_accepted"> I accept the T&Cs of this software, found <a href="https://checkmeout.pro/terms">here</a>. I also accept that this software in no way guarantees a purchase.
-								</label>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-sm-offset-2 col-sm-10">
+					<form class="form-horizontal" role="form">
+						<div class="form-group" id="shopping-list-group">
 								 
-							<button id="save" class="btn btn-default">
-								Save
-							</button>
-							<div class="alert alert-success" role="alert" id="status">Options saved successfully.</div>
+							<label class="col-sm-2 control-label">
+								Shopping list
+							</label>
+							<div class="col-sm-10">
+								<div class="list-group shopping-list" id="queue-list">
+									<li class="list-group-item shopping-header">
+										<p class="shopping-list-item">Check Me Out x Supreme</p>
+										<p id="shopping-date" class="shopping-list-item">date</p>
+									</li>
+								</div>
+							</div>
 						</div>
-					</div>
+						<div class="form-group">
+
+							<label class="col-sm-2 control-label">
+								Confirm
+							</label>
+							<div class="col-sm-10">
+								<div class="checkbox">
+										 
+									<label>
+										<input type="checkbox" id="tc_accepted"> I accept the T&Cs of this software, found <a href="https://checkmeout.pro/terms">here</a>. I also accept that this software in no way guarantees a purchase.
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+									 
+								<button type="button" id="save" class="btn btn-default">
+									Save
+								</button>
+								<div class="alert alert-success" role="alert" id="status">Options saved successfully.</div>
+							</div>
+						</div>
+					</form>
 				</div>
 		</div>
 	</div>

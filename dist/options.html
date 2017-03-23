@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Check Me Out</title>
+
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+	<link href="css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/animate.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+	<style>
+		@font-face {
+			font-family: Futura;
+			src: url(/fonts/futura-heavy-oblique.otf);
+		}
+		@font-face {
+			font-family: MerchantCopy;
+			src: url(/fonts/merchant-copy.ttf);
+		}
+
+		body {
+			padding: 25px;
+			padding-top: 70px;
+			background-color: #f8f8f8;
+			font-family: "Roboto" !important;
+		}
+		select {
+			padding: 6px;
+			border-radius: 5px;
+		}
+		hr {
+			border: solid 1px #777;
+		}
+		.header-image {
+			width: 40px;
+			margin: 10px;
+		}
+		.header-text {
+			padding-right: 25px;
+			float: right;
+		}
+
+		/* some bootstrap theme-ery */
+		a {color: rgb(237, 30, 36);}
+		a:hover {color: rgb(175, 23, 34);}
+
+		.navbar-brand, .shopping-header {
+			font-family: Futura !important;
+		}
+
+		.navbar-right {
+			padding-right: 20px;
+		}
+
+		.form-control {
+			box-shadow: none;
+		}
+
+		textarea:focus, input:focus, input[type]:focus, .uneditable-input:focus, select:focus {   
+			border-color: rgba(237, 30, 36, 0.8);
+			// box-shadow: 0 1px 1px rgba(237, 30, 36, 0.075) inset, 0 0 8px rgba(237, 30, 36, 0.6);
+			box-shadow: 0 1px 1px rgba(237, 30, 36, 0) inset, 0 0 8px rgba(237, 30, 36, 0);
+			outline: 0 none;
+		}
+
+		select:active, select:hover {
+			outline-color: red;
+		}
+
+		input[type='checkbox'] {
+			-webkit-appearance: none;
+			background-color: #fff;
+			border: 1px solid #000;
+			padding:5px;
+			border-radius: 2px;
+			display: inline-block;
+			position: relative;
+		}
+		input[type='checkbox']:checked {
+			background-color: rgb(237, 30, 36);
+			border: 1px solid #000;
+		}
+
+		.fa {
+			color: rgb(237, 30, 36);
+		}
+
+		.btn-clear {
+			float: right;
+			background-color: #f8f8f8;
+			transition: border-color ease-in-out 0.25s;
+		}
+		.btn-clear:hover {
+			border: 1px solid rgb(237, 30, 36);
+			background-color: #f8f8f8;
+		}
+
+		#add-queue {
+			margin-bottom: 5px;
+		}
+
+		#keyword-alert {
+			display: none;
+		}
+
+		.list-group-item:first-child {
+			background-color: #fff;
+			border-top: 1px solid gray;
+			border-left: 1px solid gray;
+			border-right: 1px solid gray;
+		}
+		.list-group-item  {
+			background-color: #fff;
+			font-family: MerchantCopy;
+			color: #777;
+			font-size: 1.5em;
+
+			border-top: 1px dashed gray;
+			border-bottom: 1px dashed gray;
+			border-left: 1px solid gray;
+			border-right: 1px solid gray;
+		}
+		.list-group-item:last-child {
+			background-color: #fff;
+			border-bottom: 1px solid gray;
+			border-left: 1px solid gray;
+			border-right: 1px solid gray;
+		}
+
+		.shopping-item {
+			transition: border-right ease-in-out 0.15s;
+		}
+		.shopping-item:hover {
+			border-right: 8px solid red;
+		}
+		.shopping-item:hover > .delete-hint {
+			display: block;
+		}
+
+		.shopping-list-item {
+			font-family: MerchantCopy;
+			color: #777;
+			display: inline-block;
+		}
+		#shopping-date {
+			float: right;
+		}
+
+		.delete-hint {
+			display: none;
+			float: right;
+			color: red;
+		}
+
+		.logo-lred {
+			color: #ed1d24;
+		}
+		.logo-dred {
+			color: #ce212a;
+		}
+		.logo-orange {
+			color: #f37e22;
+		}
+
+		#status {
+			margin-top: 10px;
+			display: none;
+		}
+
+		#address2-col {
+			padding-left: 0;
+			padding-right: 5px;
+		}
+		#address3-col {
+			padding-left: 5px;
+			padding-right: 0;
+		}
+
+		::selection {
+			color: #f8f8f8;
+			background: rgb(237, 30, 36); /* WebKit/Blink Browsers */
+		}
+		::-moz-selection {
+			color: #f8f8f8;
+			background: rgb(237, 30, 36); /* Gecko Browsers */
+		}
+	</style>
+
+</head>
+<body>
+
+	<!-- debug modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="debug-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Debug log</h4>
+				</div>
+				<div class="modal-body">
+					<pre id="log-out"></pre>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default" data-clipboard-target="#log-out"><i class="fa fa-clipboard"></i> Copy to clipboard</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- changelog modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="changelog-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Changelog</h4>
+				</div>
+				<div class="modal-body">
+					<pre id="changelog-out"></pre>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- confirm delete modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="confirm-delete-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Confirm</h4>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete all data? This cannot be undone!</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default" id="delete-all"><i class="fa fa-trash"></i> Delete all</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- about modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="about-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">About</h4>
+				</div>
+				<div class="modal-body">
+					<h4>Open source technologies</h4>
+					<p>We <i class="fa fa-heart"></i> open source</p>
+					<ul>
+						<li><a href="https://getbootstrap.com">Bootstrap</a></li>
+						<li><a href="http://bootstrap-notify.remabledesigns.com/">Bootstrap-notify</a></li>
+						<li><a href="https://clipboardjs.com/">Clipboard.js</a></li>
+						<li><a href="https://jquery.com/">JQuery</a></li>
+						<li><a href="http://fontawesome.io/">Font Awesome</a></li>
+						<li><a href="https://daneden.github.io/animate.css/">Animate.css</a></li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<p>&copy; Copyright 2017, Check Me Out Ltd.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+
+				<a class="navbar-brand" href="https://checkmeout.pro"><span class="logo-lred">Check</span><span class="logo-dred">Me</span><span class="logo-orange">Out</span> for Supreme &nbsp;<span class="badge" id="ver"></span></a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a href="" id="eu">EU</a></li>
+					<li><a href="" id="us">US</a></li>
+					<li><a href="" id="jp">JP</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Advanced <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#" id="show-log" data-toggle="modal" data-target="#debug-modal">Debug log</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#changelog-modal">Changelog</a></li>
+							<li><a href="#" data-toggle="modal" data-target="#confirm-delete-modal">Delete all saved data</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#" data-toggle="modal" data-target="#about-modal">About</a></li>
+						</ul>
+					</li>
+				</ul>
+				<p class="navbar-text navbar-right">Follow us on <a href="https://instagram.com/checkmeoutbots">Instagram</a> to stay up to date with news and giveaways!</p>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6">
+				<!-- <div id="status"></div> -->
+				<h3>
+					<i class="fa fa-truck" aria-hidden="true"></i>&nbsp; Shipping information
+					<button class="btn btn-default btn-clear" id="clear-shipping">clear</button>
+				</h3>
+				<hr>
+				<!-- <p><b>Important:</b> autofill will only work if the checkout page is in English or Japanese! Make sure Chrome does not translate the page.</p> -->
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						 
+						<label for="name" class="col-sm-2 control-label">
+							Name
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="name">
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="email" class="col-sm-2 control-label">
+							Email
+						</label>
+						<div class="col-sm-10">
+							<input type="email" class="form-control" id="email" required>
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="phone" class="col-sm-2 control-label">
+							Phone
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="phone">
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="address" class="col-sm-2 control-label">
+							Address
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="address">
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<div class="col-sm-offset-2 col-sm-10">
+							<div class="col-xs-6" id="address2-col">
+								<input type="text" class="form-control" id="address2" placeholder="optional">
+							</div>
+							<div class="col-xs-6" id="address3-col">
+								<input type="text" class="form-control" id="address3" placeholder="optional">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="city" class="col-sm-2 control-label">
+							City
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="city">
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="zip" class="col-sm-2 control-label">
+							Zip / Postcode
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="zip">
+						</div>
+					</div>
+					<div class="form-group" id="us-state">
+						 
+						<label for="state" class="col-sm-2 control-label">
+							State / Province
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="state">
+							<p>2 letter code as it appears on Supreme</p>
+						</div>
+					</div>
+					<div class="form-group" id="jp-prefecture">
+						 
+						<label for="prefecture" class="col-sm-2 control-label">
+							Prefecture
+						</label>
+						<div class="col-sm-10">
+							<select id="prefecture">
+								<option value="">--</option>
+								<option value=" 北海道"> 北海道</option>
+								<option value=" 青森県"> 青森県</option>
+								<option value=" 岩手県"> 岩手県</option>
+								<option value=" 宮城県"> 宮城県</option>
+								<option value=" 秋田県"> 秋田県</option>
+								<option value=" 山形県"> 山形県</option>
+								<option value=" 福島県"> 福島県</option>
+								<option value=" 茨城県"> 茨城県</option>
+								<option value=" 栃木県"> 栃木県</option>
+								<option value=" 群馬県"> 群馬県</option>
+								<option value=" 埼玉県"> 埼玉県</option>
+								<option value=" 千葉県"> 千葉県</option>
+								<option value=" 東京都"> 東京都</option>
+								<option value=" 神奈川県"> 神奈川県</option>
+								<option value=" 新潟県"> 新潟県</option>
+								<option value=" 富山県"> 富山県</option>
+								<option value=" 石川県"> 石川県</option>
+								<option value=" 福井県"> 福井県</option>
+								<option value=" 山梨県"> 山梨県</option>
+								<option value=" 長野県"> 長野県</option>
+								<option value=" 岐阜県"> 岐阜県</option>
+								<option value=" 静岡県"> 静岡県</option>
+								<option value=" 愛知県"> 愛知県</option>
+								<option value=" 三重県"> 三重県</option>
+								<option value=" 滋賀県"> 滋賀県</option>
+								<option value=" 京都府"> 京都府</option>
+								<option value=" 大阪府"> 大阪府</option>
+								<option value=" 兵庫県"> 兵庫県</option>
+								<option value=" 奈良県"> 奈良県</option>
+								<option value=" 和歌山県"> 和歌山県</option>
+								<option value=" 鳥取県"> 鳥取県</option>
+								<option value=" 島根県"> 島根県</option>
+								<option value=" 岡山県"> 岡山県</option>
+								<option value=" 広島県"> 広島県</option>
+								<option value=" 山口県"> 山口県</option>
+								<option value=" 徳島県"> 徳島県</option>
+								<option value=" 香川県"> 香川県</option>
+								<option value=" 愛媛県"> 愛媛県</option>
+								<option value=" 高知県"> 高知県</option>
+								<option value=" 福岡県"> 福岡県</option>
+								<option value=" 佐賀県"> 佐賀県</option>
+								<option value=" 長崎県"> 長崎県</option>
+								<option value=" 熊本県"> 熊本県</option>
+								<option value=" 大分県"> 大分県</option>
+								<option value=" 宮崎県"> 宮崎県</option>
+								<option value=" 鹿児島県"> 鹿児島県</option>
+								<option value=" 沖縄県"> 沖縄県</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="country" class="col-sm-2 control-label">
+							Country
+						</label>
+						<div class="col-sm-10">
+							<select id="country">
+								<option value="GB">UK</option>
+								<option value="NB">UK (N. IRELAND)</option>
+								<option value="">--</option>
+								<option value="AT">AUSTRIA</option>
+								<option value="BY">BELARUS</option>
+								<option value="BE">BELGIUM</option>
+								<option value="BG">BULGARIA</option>
+								<option value="HR">CROATIA</option>
+								<option value="CZ">CZECH REPUBLIC</option>
+								<option value="DK">DENMARK</option>
+								<option value="EE">ESTONIA</option>
+								<option value="FI">FINLAND</option>
+								<option value="FR">FRANCE</option>
+								<option value="DE">GERMANY</option>
+								<option value="GR">GREECE</option>
+								<option value="HU">HUNGARY</option>
+								<option value="IS">ICELAND</option>
+								<option value="IE">IRELAND</option>
+								<option value="IT">ITALY</option>
+								<option value="LV">LATVIA</option>
+								<option value="LT">LITHUANIA</option>
+								<option value="LU">LUXEMBOURG</option>
+								<option value="MC">MONACO</option>
+								<option value="NL">NETHERLANDS</option>
+								<option value="NO">NORWAY</option>
+								<option value="PL">POLAND</option>
+								<option value="PT">PORTUGAL</option>
+								<option value="RO">ROMANIA</option>
+								<option value="RU">RUSSIA</option>
+								<option value="SK">SLOVAKIA</option>
+								<option value="SI">SLOVENIA</option>
+								<option value="ES">SPAIN</option>
+								<option value="SE">SWEDEN</option>
+								<option value="CH">SWITZERLAND</option>
+								<option value="TR">TURKEY</option>
+								<option value="">--</option>
+								<option value="USA">USA</option>
+								<option value="CANADA">CANADA</option>
+								<option value="">--</option>
+								<option value="JP">JAPAN</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-6">
+				<h3>
+					<i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp; Payment information
+					<button class="btn btn-default btn-clear" id="clear-payment">clear</button>
+				</h3>
+				<hr>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						 
+						<label for="card_type" class="col-sm-2 control-label">
+							Card type
+						</label>
+						<div class="col-sm-10">
+							<select id="card_type">
+								<option value="visa">Visa</option>
+								<option value="american_express">American Express</option>
+								<option value="master">Mastercard</option>
+								<option value="solo">Solo</option>
+								<option value="paypal">PayPal</option>
+								<option value="jcb">JCB</option>
+								<option value="cod">Cash on Delivery (JP only)</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="card_no" class="col-sm-2 control-label">
+							Card number
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="card_no">
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="expiry_month" class="col-sm-2 control-label">
+							Expiry month (e.g. 09)
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="expiry_month">
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="expiry_year" class="col-sm-2 control-label">
+							Expiry year (e.g. 2019)
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="expiry_year">
+						</div>
+					</div>
+					<div class="form-group">
+						 
+						<label for="cvv" class="col-sm-2 control-label">
+							CVV
+						</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="cvv">
+						</div>
+					</div>
+					<div class="form-group" id="alt-size-group">
+ 
+						<label for="alt-size" class="col-sm-2 control-label">
+							Size
+						</label>
+						<div class="col-sm-10">
+							<select id="alt-size">
+								<option value="Small">Small</option>
+								<option value="Medium">Medium</option>
+								<option value="Large">Large</option>
+								<option value="XLarge">XLarge</option>
+								<option value="">--</option>
+								<option value="One size">One size</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+
+						<label class="col-sm-2 control-label">
+							Purchase options
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+								 
+								<label>
+									<input type="checkbox" id="any_size"> Continue with next size if chosen size is not available
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<div class="checkbox">
+								 
+								<label>
+									<input type="checkbox" id="autoco"> Auto-checkout
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<div class="checkbox" data-toggle="tooltip" data-placement="left" title="Recommended, but may result in duplicate orders">
+								 
+								<label>
+									<input type="checkbox" id="tryagain"> If checkout fails for some reason, keep trying
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<div class="checkbox">
+								 
+								<label>
+									<input type="checkbox" id="bypass"> Bypass reCAPTCHA
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+
+						<label for="delay" class="col-sm-2 control-label">
+							Delay
+						</label>
+						<div class="col-sm-4">	 
+							<label>
+								<input type="range" id="delay" min="0.0" max="5.0" step="0.1" data-toggle="tooltip" data-placement="right" title="Use a delay to avoid ghost orders"> 
+								<span id="delay_text">-- seconds</span>
+							</label>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6" id="keyword-section">
+					<h3>
+						<i class="fa fa-search" aria-hidden="true"></i>&nbsp; Keyword search (<a href="https://checkmeout.pro/instructions">instructions</a>)
+						<button class="btn btn-default btn-clear" id="clear-keywords">clear</button>
+					</h3>
+					<hr>
+
+					<div class="alert alert-danger alert-dismissable" role="alert" id="keyword-alert">These boxes cannot be left blank!<button type="button" class="close" id="keyword-alert-dismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+
+							<label for="kw_enabled" class="col-sm-2 control-label">
+								Keywords
+							</label>
+							<div class="col-sm-10">
+								<div class="checkbox">
+									 
+									<label>
+										<input type="checkbox" id="kw_enabled"> Enabled
+									</label>
+								</div>
+							</div>
+						</div>
+						<div id="kw-form-group">
+							<div class="form-group">
+								 
+								<label for="category" class="col-sm-2 control-label">
+									Auto-start
+								</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<span class="input-group-addon">
+											<input type="checkbox" id="ar_enabled" aria-label="...">&nbsp; Run at:
+										</span>
+										<input type="text" class="form-control" id="start_time" aria-label="...">
+									</div>
+									<p>24H time in format HH:MM:SS (your machine time, not the time on supremenewyork.com). We recommend <a href="https://time.is/">time.is</a> for setting your time accurately.</p>
+								</div>
+							</div>
+							<div class="form-group">
+								 
+								<label for="category" class="col-sm-2 control-label">
+									Category
+								</label>
+								<div class="col-sm-10">
+									<select id="category">
+										<option value="jackets">Jackets</option>
+										<option value="shirts">Shirts</option>
+										<option value="tops_sweaters">Tops/Sweaters</option>
+										<option value="sweatshirts">Sweatshirts</option>
+										<option value="pants">Pants</option>
+										<option value="shorts">Shorts</option>
+										<option value="t-shirts">T-Shirts</option>
+										<option value="hats">Hats</option>
+										<option value="bags">Bags</option>
+										<option value="accessories">Accessories</option>
+										<option value="skate">Skate</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								 
+								<label for="keywords" class="col-sm-2 control-label">
+									Keywords
+								</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="keywords" data-toggle="tooltip" data-trigger="manual" data-placement="right" title="Make sure to enable keywords above!">
+									<p>Separated by spaces. Including words that are not in the product name will cause the search to fail.</p>
+								</div>
+							</div>
+							<div class="form-group">
+								 
+								<label for="colour" class="col-sm-2 control-label">
+									Colour
+								</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="colour">
+									<p>Best guesses at colourway, separated by spaces. E.g. 'blue royal cyan cobalt'</p>		
+								</div>
+							</div>
+							<div class="form-group">
+	 
+								<label for="size" class="col-sm-2 control-label">
+									Size
+								</label>
+								<div class="col-sm-10">
+									<select id="size">
+										<option value="Small">Small</option>
+										<option value="Medium">Medium</option>
+										<option value="Large">Large</option>
+										<option value="XLarge">XLarge</option>
+										<option value="">--</option>
+										<option value="One size">One size</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								 
+								<div class="col-sm-offset-2 col-sm-10">
+									<button type="button" id="add-queue" class="btn btn-default">
+										Add to shopping list &nbsp;<i class="fa fa-arrow-right"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-6">
+					<h3>
+						<i class="fa fa-check" aria-hidden="true"></i>&nbsp; Finalise
+					</h3>
+					<hr>
+					<div class="form-group" id="shopping-list-group">
+							 
+						<label for="queue-list" class="col-sm-2 control-label" style="text-align: right">
+							Shopping list
+						</label>
+						<div class="col-sm-10">
+							<div class="list-group shopping-list" id="queue-list">
+								<li class="list-group-item shopping-header">
+									<p class="shopping-list-item">Check Me Out x Supreme</p>
+									<p id="shopping-date" class="shopping-list-item">date</p>
+								</li>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+
+						<label for="tc_accepted" class="col-sm-2 control-label" style="text-align: right">
+							Confirm
+						</label>
+						<div class="col-sm-10">
+							<div class="checkbox">
+									 
+								<label>
+									<input type="checkbox" id="tc_accepted"> I accept the T&Cs of this software, found <a href="https://checkmeout.pro/terms">here</a>. I also accept that this software in no way guarantees a purchase.
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+								 
+							<button id="save" class="btn btn-default">
+								Save
+							</button>
+							<div class="alert alert-success" role="alert" id="status">Options saved successfully.</div>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-notify.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="options.js"></script>
+	<script src="country.js"></script>
+	<script src="js/popup/analytics.js"></script>
+
+  </body>
+</html>

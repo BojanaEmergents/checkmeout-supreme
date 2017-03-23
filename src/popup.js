@@ -3,6 +3,9 @@
 	var optspage = document.getElementById("opts");
 	var instpage = document.getElementById("inst");
 
+	chrome.tabs.executeScript(null, {file: "js/jquery.min.js"});
+	chrome.tabs.executeScript(null, {file: "js/bootstrap-notify.min.js"});
+
 	link.addEventListener('click', function() {
 		chrome.storage.sync.set({
 			runnable: true

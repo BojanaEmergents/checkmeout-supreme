@@ -2,7 +2,8 @@
 from __future__ import with_statement
 from contextlib import closing
 from zipfile import ZipFile, ZIP_DEFLATED
-import os, json
+import os, json, shutil
+from subprocess import call
 
 def zipdir(basedir, archivename):
     assert os.path.isdir(basedir)
@@ -15,9 +16,25 @@ def zipdir(basedir, archivename):
                 z.write(absfn, zfn)
 
 if __name__ == '__main__':
+    basedir = 'src'
+    copydir = 'dist'
+
+    print 'Clearing old files...'
+    shutil.rmtree('dist')
+
+    print 'Copying...'
+    shutil.copytree(basedir, copydir)
+
+    os.chdir('dist')
+
+    print 'Obfuscating...'
+    os.system("uglifyjs navigate.js -o navigate.js")
+
+    os.chdir('..')
+
+    print 'Building...'
     with open('src/manifest.json') as manifest:
         data = json.load(manifest)
     ver = data["version"]
-    basedir = 'src'
     archivename = 'build/supreme-bot-chrome-'+ver+'.zip'
-    zipdir(basedir, archivename)
+    zipdir(copydir, archivename)

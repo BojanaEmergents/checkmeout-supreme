@@ -21,6 +21,7 @@ function save_options() {
 	var any_size = document.getElementById("any_size").checked;
 	var autoco = document.getElementById("autoco").checked;
 	var tryagain = document.getElementById("tryagain").checked;
+	var bypass = document.getElementById("bypass").checked;
 	var delay = document.getElementById("delay").value;
 	
 	var kw_enabled = document.getElementById("kw_enabled").checked;
@@ -54,6 +55,7 @@ function save_options() {
 		any_size: any_size,
 		autoco: autoco,
 		tryagain: tryagain,
+		bypass: bypass,
 		delay: delay,
 
 		kw_enabled: kw_enabled,
@@ -108,6 +110,7 @@ function restore_options() {
 		any_size: '',
 		autoco: '',
 		tryagain: '',
+		bypass: '',
 		delay: '',
 
 		kw_enabled: '',
@@ -123,6 +126,7 @@ function restore_options() {
 	}, 
 	function(items) {
 		document.getElementById("log-out").innerText = JSON.stringify(items.report, null, 2);
+		$("#changelog-out").load("CHANGELOG");
 
 		document.getElementById('name').value = items.name;
 		document.getElementById("email").value = items.email;
@@ -145,6 +149,7 @@ function restore_options() {
 		document.getElementById("any_size").checked = items.any_size;
 		document.getElementById("autoco").checked = items.autoco;
 		document.getElementById("tryagain").checked = items.tryagain;
+		document.getElementById("bypass").checked = items.bypass;
 		document.getElementById("delay").value = items.delay;
 		document.getElementById("delay_text").innerText = items.delay + " seconds";
 
