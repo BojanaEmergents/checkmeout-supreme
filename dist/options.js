@@ -1,3 +1,13 @@
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-87467388-2']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = 'https://ssl.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
 // Saves options to chrome.storage
 function save_options() {
 	var name = document.getElementById("name").value;
@@ -122,6 +132,8 @@ function restore_options() {
 		size: '',
 		queue: [],
 		report: '',
+		proxy: '',
+		proxy_enabled: '',
 		//tc_accepted: ''
 	}, 
 	function(items) {
@@ -176,6 +188,9 @@ function restore_options() {
 		}
 
 		document.getElementById("ver").innerHTML = chrome.runtime.getManifest().version + "&nbsp;";
+
+		document.getElementById("proxy-data").value = items.proxy;
+		document.getElementById("proxy_enabled").checked = items.proxy_enabled;
 	});
 }
 
@@ -340,5 +355,50 @@ $('#kw_enabled').click(function() {
 	else {
 		document.getElementById("alt-size-group").hidden = false;
 		document.getElementById("kw-form-group").hidden = true;
+	}
+});
+
+// proxy settings
+$('#save-proxy').click(function() {
+	chrome.storage.sync.set({proxy: $('#proxy-data').val()}, null);
+
+	var host = $('#proxy-data').val().split(':')[0];
+	var port = parseInt($('#proxy-data').val().split(':')[1]);
+
+	var proxy_config = {
+		mode: "fixed_servers",
+		rules: {
+			singleProxy: {
+				host: host,
+				port: port
+			}
+		}
+	};
+	
+	if ($('#proxy_enabled').is(':checked')) {
+		chrome.storage.sync.set({proxy_enabled: true}, null);
+		chrome.proxy.settings.set({
+			value: proxy_config,
+			scope: 'regular'
+		});
+
+		$.notify({
+				title: "<b>Success</b><br>",
+				message: "Proxy settings saved."
+			},
+			{
+				type: 'success',
+				animate: {
+					enter: 'animated fadeInDown',
+					exit: 'animated fadeOutUp'
+				},
+				delay: 2000
+			});
+	}
+	else {
+		chrome.storage.sync.set({proxy_enabled: false}, null);
+		chrome.proxy.settings.clear({
+			scope: 'regular'
+		});
 	}
 });

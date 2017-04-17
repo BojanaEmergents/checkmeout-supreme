@@ -7,6 +7,19 @@ report.version = chrome.runtime.getManifest().version;
 report.out = [];
 report.err = [];
 
+(function() {
+	if (document.getElementById("logobrand") == null) {
+		var br = document.createElement('br');
+		var p = document.createElement('p');
+		p.setAttribute("id", "logobrand");
+		var text = document.createTextNode('with Check Me Out');
+		p.appendChild(text);
+		var logo = document.getElementsByClassName("logo")[0];
+		logo.appendChild(br);
+		logo.appendChild(p);
+	}
+})();
+
 function log(message, type) {
 	if (type == "out") {
 		report.out.push(message);
@@ -82,53 +95,50 @@ function findKeywordItem(current_item) {
 		htmlDoc = parser.parseFromString(xhr.responseText,"text/html");
 		articles = htmlDoc.getElementsByTagName("article");
 
-		var notfound_item = 0;
-		var found_items = 0;
-		var notfound_colour = 0;
+		var store_items = [];
 
 		for (var i = 0; i < articles.length; i++) {
-			var name = articles[i].childNodes[0].childNodes[1].childNodes[0].text;
-			var color = articles[i].childNodes[0].childNodes[2].childNodes[0].text;
-
-			if (name.toLowerCase().indexOf(current_item[1].toLowerCase()) != -1) {
-				found_items += 1;
-				// if (color.toLowerCase().indexOf(current_item[2].toLowerCase()) != -1) {
-				if (match(color, current_item[2])) {
-					var href = articles[i].childNodes[0].childNodes[0].getAttribute('href');
-					window.location.href = "http://www.supremenewyork.com" + href;
-				}
-				else {
-					notfound_colour += 1;
-				}
-			}
-			else {
-				notfound_item += 1;
-			}
+			tempObj = new Object();
+			tempObj.name = articles[i].childNodes[0].childNodes[1].childNodes[0].text;
+			tempObj.colour = articles[i].childNodes[0].childNodes[2].childNodes[0].text;
+			tempObj.href = articles[i].childNodes[0].childNodes[0].getAttribute('href');
+			store_items.push(tempObj);
 		}
 
-		if (notfound_item == articles.length) {
-			log("No product found: "+current_item[1]+" in: "+current_item[0], "err");
-			if (!items.ar_enabled) {
-				asyncNotify("Check Me Out", "No matching products found. Check your keywords!");
-			}
-			else {
-				// only display 1 in 10 notifications otherwise shit gets hectic
-				chance = Math.floor((Math.random() * 10) + 1);
-				if (chance == 1) {
-					asyncNotify("Check Me Out", "No matching products found. Check your keywords!");
-				}
-			}
+		var options = {
+			shouldSort: true,
+			tokenize: true,
+			threshold: 0.3,
+			location: 0,
+			distance: 100,
+			maxPatternLength: 32,
+			minMatchCharLength: 1,
+			keys: [
+				"name",
+				"colour"
+			]
+		};
+
+		var fuse = new Fuse(store_items, options);
+		var result = fuse.search(current_item[1]);
+
+		var fuse = new Fuse(result, options);
+		var result = fuse.search(current_item[2]);
+
+		console.log(result);
+
+		if (result[0] != undefined) {
+			window.location.href = "http://www.supremenewyork.com" + result[0].href;
 		}
-		if (notfound_colour == found_items) {
-			log("No colour found: "+current_item[2]+" item: "+current_item[1], "err");
+		else {
 			if (!items.ar_enabled) {
-				asyncNotify("Check Me Out", "No matching colours found. Check your keywords!");
+				asyncNotify("Check Me Out", "That keyword/colour combination could not be found!");
 			}
 			else {
-				// only display 1 in 10 notifications otherwise shit gets hectic
-				chance = Math.floor((Math.random() * 10) + 1);
+				// only display 1 in 15 notifications otherwise shit gets hectic
+				chance = Math.floor((Math.random() * 15) + 1);
 				if (chance == 1) {
-					asyncNotify("Check Me Out", "No matching colours found. Check your keywords!");
+					asyncNotify("Check Me Out", "That keyword/colour combination could not be found!");
 				}
 			}
 		}
@@ -136,7 +146,7 @@ function findKeywordItem(current_item) {
 }
 
 // if keyword enabled, run the item search
-if (url_split[url_split.length-1] == "shop" || url_split[url_split.length-3] == "shop") {
+if (url_split[url_split.length-1] == "shop" || url_split[url_split.length-2] == "shop" || url_split[url_split.length-3] == "shop") {
 	log("Ran on shop page", "out");
 	chrome.storage.sync.get({
 		region: '',
@@ -289,6 +299,8 @@ if (window.location.href.includes("checkout")) {
 			var _0xbd9e=["\x72\x65\x6D\x6F\x76\x65","\x2E\x67\x2D\x72\x65\x63\x61\x70\x74\x63\x68\x61"];$(_0xbd9e[1])[_0xbd9e[0]]();
 		}
 
+		$('.logo').append($('<br><p>Note: this page needs to be in English or Japanese for autofill to work.</p>'));
+
 	  	/*
 		document.getElementById('order_billing_name').value = items.name;
 		document.getElementById("order_email").value = items.email;
@@ -335,19 +347,19 @@ if (window.location.href.includes("checkout")) {
 			if ($(this).text() == "postcode" || $(this).text() == "zip" || $(this).text() == "郵便番号") {
 				document.getElementById($(this).attr('for')).value = items.zip;
 			}
-			if ($(this).text() == "state") {
-				document.getElementById($(this).attr('for')).value = items.state;
+			if ($(this).text() == "country") {
+				document.getElementById($(this).attr('for')).value = items.country;
+				// trigger a change event to update the page
+				document.getElementById($(this).attr('for')).dispatchEvent(new Event('change'));
 			}
 			if ($(this).text() == "都道府県") {
 				document.getElementById($(this).attr('for')).value = items.prefecture;
-			}
-			if ($(this).text() == "country") {
-				document.getElementById($(this).attr('for')).value = items.country;
 			}
 
 			// payment info
 			if ($(this).text() == "type" || $(this).text() == "支払い方法") {
 				document.getElementById($(this).attr('for')).value = items.card_type;
+				document.getElementById($(this).attr('for')).dispatchEvent(new Event('change'));
 			}
 			if ($(this).text() == "exp. date" || $(this).text() == "有効期限") {
 				var a = $(this).attr('for');
@@ -378,6 +390,11 @@ if (window.location.href.includes("checkout")) {
 		}
 		if (document.getElementById("order_billing_address_3") != null) {
 			document.getElementById("order_billing_address_3").value = items.address3;
+		}
+
+		// CA province only seems to work like this
+		if (items.region == "us") {
+			document.getElementById('order_billing_state').value = items.state;
 		}
 
 		// tick the t&c box

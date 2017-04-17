@@ -158,7 +158,7 @@
 		}
 
 		.logo-lred {
-			color: #ed1d24;
+			color: #ed1d24 !important;
 		}
 		.logo-dred {
 			color: #ce212a;
@@ -181,6 +181,10 @@
 			padding-right: 0;
 		}
 
+		#changelog-out {
+			overflow-wrap: break-word;
+		}
+
 		::selection {
 			color: #f8f8f8;
 			background: rgb(237, 30, 36); /* WebKit/Blink Browsers */
@@ -193,6 +197,34 @@
 
 </head>
 <body>
+
+	<!-- proxy modal -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="proxy-modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Proxy settings</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<div class="checkbox" style="margin-bottom: 15px;">
+							<label>
+								<input type="checkbox" id="proxy_enabled"> Enabled
+							</label>
+						</div>
+						<input type="text" class="form-control" id="proxy-data" placeholder="<hostname>:<port>">
+						<br>
+						<p>A large list of reliable proxies can be found <a href="https://hidemy.name/en/proxy-list/">here</a>.</p>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="save-proxy"><i class="fa fa-check"></i> Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- debug modal -->
 	<div class="modal fade" tabindex="-1" role="dialog" id="debug-modal">
@@ -259,6 +291,9 @@
 					<h4 class="modal-title">About</h4>
 				</div>
 				<div class="modal-body">
+					<h3>Made by two university students with a passion for both good quality streetwear, and good quality software.</h3> 
+					<h3>It just made sense to combine the two.</h3>
+					<hr>
 					<h4>Open source technologies</h4>
 					<p>We <i class="fa fa-heart"></i> open source</p>
 					<ul>
@@ -268,6 +303,7 @@
 						<li><a href="https://jquery.com/">JQuery</a></li>
 						<li><a href="http://fontawesome.io/">Font Awesome</a></li>
 						<li><a href="https://daneden.github.io/animate.css/">Animate.css</a></li>
+						<li><a href="http://fusejs.io/">Fuse.js</a></li>
 					</ul>
 				</div>
 				<div class="modal-footer">
@@ -298,6 +334,7 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Advanced <span class="caret"></span></a>
 						<ul class="dropdown-menu">
+							<li><a href="#" data-toggle="modal" data-target="#proxy-modal">Proxy settings</a></li>
 							<li><a href="#" id="show-log" data-toggle="modal" data-target="#debug-modal">Debug log</a></li>
 							<li><a href="#" data-toggle="modal" data-target="#changelog-modal">Changelog</a></li>
 							<li><a href="#" data-toggle="modal" data-target="#confirm-delete-modal">Delete all saved data</a></li>
@@ -329,6 +366,7 @@
 						</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="name">
+							<p id="jp-name-prompt">Enter full name separated by a space and it will be entered as first and last name on Supreme.</p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -712,7 +750,7 @@
 								</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control" id="keywords" data-toggle="tooltip" data-trigger="manual" data-placement="right" title="Make sure to enable keywords above!">
-									<p>Separated by spaces. Including words that are not in the product name will cause the search to fail.</p>
+									<p>Separated by spaces. New fuzzy search means the bot will always try and find the closest match - even if there are spelling errors etc.</p>
 								</div>
 							</div>
 							<div class="form-group">
@@ -807,7 +845,6 @@
 	<script src="js/clipboard.min.js"></script>
 	<script src="options.js"></script>
 	<script src="country.js"></script>
-	<script src="js/popup/analytics.js"></script>
 
   </body>
 </html>

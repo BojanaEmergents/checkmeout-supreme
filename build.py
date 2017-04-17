@@ -19,6 +19,12 @@ if __name__ == '__main__':
     basedir = 'src'
     copydir = 'dist'
 
+    with open('src/manifest.json') as manifest:
+        data = json.load(manifest)
+    ver = data["version"]
+
+    print 'Packaging version ' + ver
+
     print 'Clearing old files...'
     shutil.rmtree('dist')
 
@@ -33,8 +39,7 @@ if __name__ == '__main__':
     os.chdir('..')
 
     print 'Building...'
-    with open('src/manifest.json') as manifest:
-        data = json.load(manifest)
-    ver = data["version"]
     archivename = 'build/supreme-bot-chrome-'+ver+'.zip'
     zipdir(copydir, archivename)
+
+    print 'Done!'

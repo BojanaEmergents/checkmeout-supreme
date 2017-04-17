@@ -1,12 +1,24 @@
- document.addEventListener('DOMContentLoaded', function() {
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-87467388-2']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = 'https://ssl.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+document.addEventListener('DOMContentLoaded', function() {
 	var link = document.getElementById('run');
 	var optspage = document.getElementById("opts");
 	var instpage = document.getElementById("inst");
 
 	chrome.tabs.executeScript(null, {file: "js/jquery.min.js"});
 	chrome.tabs.executeScript(null, {file: "js/bootstrap-notify.min.js"});
+	chrome.tabs.executeScript(null, {file: "js/fuse.min.js"});
 
-	link.addEventListener('click', function() {
+	link.addEventListener('click', function(e) {
+		_gaq.push(['_trackEvent', e.target.id, 'clicked']);
 		chrome.storage.sync.set({
 			runnable: true
 		},

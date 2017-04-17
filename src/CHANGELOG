@@ -1,3 +1,21 @@
+v3.13
+=====
+Fixed a bug in URL parsing
+Added indicator of which region is selected
+Re-implemented analytics
+Implemented new fuzzy search (thanks to fuse.js)
+Stopped 'with Check Me Out' tagline appearing multiple times
+
+v3.12
+=====
+Fixed a bug that meant Canadian provinces were not selected properly
+Added a prompt for full name for Japanese users
+
+v3.11
+=====
+Minor UI changes
+Added proxy settings
+
 v3.10
 =====
 Added option to enable or disable reCAPTCHA bypass

@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name":    "Check Me Out Supreme Bot",
-    "version": "3.10",
+    "version": "3.13",
     "description": "An advanced bot extension for Supreme. Keywords, colour/size selection, auto-fill and auto-checkout.",
     "icons": {"128": "logo-128.png"},
 
@@ -19,5 +19,6 @@
         "default_popup": "popup.html"
     },
     "options_page": "options.html",
-    "permissions": ["activeTab", "storage"]
+    "permissions": ["activeTab", "storage", "proxy"],
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
 }
