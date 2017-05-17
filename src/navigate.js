@@ -18,6 +18,8 @@ report.err = [];
 		logo.appendChild(br);
 		logo.appendChild(p);
 	}
+
+	chrome.runtime.sendMessage({type: "load", file: "js/fuse.min.js"});
 })();
 
 function log(message, type) {
@@ -73,6 +75,7 @@ function findKeywordItem(current_item) {
 		if (!current_item) {
 			log("Empty shopping list", "err");
 			alert("No items in your shopping list!");
+			chrome.storage.sync.set({runnable: false}, null);
 		}
 		log('SEARCHING: '+current_item, "out");
 		xhr = new XMLHttpRequest();
@@ -135,7 +138,7 @@ function findKeywordItem(current_item) {
 				asyncNotify("Check Me Out", "That keyword/colour combination could not be found!");
 			}
 			else {
-				// only display 1 in 15 notifications otherwise shit gets hectic
+				// only display 1 in 15 notifications otherwise shit gets hectic with timer on
 				chance = Math.floor((Math.random() * 15) + 1);
 				if (chance == 1) {
 					asyncNotify("Check Me Out", "That keyword/colour combination could not be found!");
@@ -188,6 +191,7 @@ if (window.location.href.includes("shop/") && /^([a-zA-Z0-9]{9})$/.test(url_spli
 			if (values.indexOf(items.queue[0][3]) == -1 && items.any_size == false && items.queue[0][3] != 'One size') {
 				log("Size not found", "err");
 				alert("Size " + items.queue[0][3] + " not available. The bot will now halt.");
+				chrome.storage.sync.set({runnable: false}, null);
 			}
 			else {
 				// select size
@@ -237,6 +241,7 @@ if (window.location.href.includes("shop/") && /^([a-zA-Z0-9]{9})$/.test(url_spli
 			if (values.indexOf(items.alt_size) == -1 && items.any_size == false && items.alt_size != 'One size') {
 				log("Size not found", "err");
 				alert("Size " + items.alt_size + " not available. The bot will now halt.");
+				chrome.storage.sync.set({runnable: false}, null);
 			}
 			else {
 				setInterval(function() {
@@ -296,7 +301,7 @@ if (window.location.href.includes("checkout")) {
 	}, 
 	function(items) {
 		if (items.bypass) {
-			var _0xbd9e=["\x72\x65\x6D\x6F\x76\x65","\x2E\x67\x2D\x72\x65\x63\x61\x70\x74\x63\x68\x61"];$(_0xbd9e[1])[_0xbd9e[0]]();
+			// var _0xbd9e=["\x72\x65\x6D\x6F\x76\x65","\x2E\x67\x2D\x72\x65\x63\x61\x70\x74\x63\x68\x61"];$(_0xbd9e[1])[_0xbd9e[0]]();
 		}
 
 		$('.logo').append($('<br><p>Note: this page needs to be in English or Japanese for autofill to work.</p>'));
@@ -329,8 +334,8 @@ if (window.location.href.includes("checkout")) {
 			if ($(this).text() == "名前") {
 				var a = $(this).attr('for');
 				var b = document.getElementById(a).parentNode;
-				b.childNodes[1].value = items.name.split(' ')[0];
-				b.childNodes[2].value = items.name.split(' ')[1];
+				b.childNodes[1].value = items.name.split('\\s+')[0];
+				b.childNodes[2].value = items.name.split('\\s+')[1];
 			}
 			if ($(this).text() == "email" || $(this).text() == "Eメール") {
 				document.getElementById($(this).attr('for')).value = items.email;

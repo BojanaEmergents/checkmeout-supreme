@@ -64,3 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById("welcome").innerText = "Welcome, " + items.name.split(' ')[0];
 	});
 });
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	if (request.type == "load") {
+		console.log('load trigger');
+		chrome.tabs.executeScript(null, {file: request.file});
+	}
+});

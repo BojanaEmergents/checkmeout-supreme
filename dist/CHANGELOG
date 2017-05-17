@@ -1,3 +1,12 @@
+v3.15
+=====
+Added support for shoes. Sizes based off very limited info
+Disabled CAPTCHA bypass for all users
+
+v3.14
+=====
+Fixed a bug that meant only one item could be added to cart
+
 v3.13
 =====
 Fixed a bug in URL parsing

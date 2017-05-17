@@ -161,7 +161,6 @@ function restore_options() {
 		document.getElementById("any_size").checked = items.any_size;
 		document.getElementById("autoco").checked = items.autoco;
 		document.getElementById("tryagain").checked = items.tryagain;
-		document.getElementById("bypass").checked = items.bypass;
 		document.getElementById("delay").value = items.delay;
 		document.getElementById("delay_text").innerText = items.delay + " seconds";
 
@@ -191,6 +190,11 @@ function restore_options() {
 
 		document.getElementById("proxy-data").value = items.proxy;
 		document.getElementById("proxy_enabled").checked = items.proxy_enabled;
+
+		if (items.bypass) {
+			document.getElementById("bypass").checked = false;
+			chrome.storage.sync.set({bypass: false}, null);
+		}
 	});
 }
 
